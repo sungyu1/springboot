@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: header}" />
+<body>
+<div class="container">
+    <h2>휴가 승인 관리</h2>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>이름</th><th>휴가 유형</th><th>시작일</th><th>종료일</th><th>상태</th><th>승인/반려</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="req : ${requests}">
+            <td th:text="${req.member.name}"></td>
+            <td th:text="${req.vacationType.name}"></td>
+            <td th:text="${req.startDate}"></td>
+            <td th:text="${req.endDate}"></td>
+            <td th:text="${req.status}"></td>
+            <td>
+                <form th:action="@{'/admin/approvals/' + ${req.id} + '/approve'}" method="post" style="display:inline">
+                    <button class="btn btn-success" type="submit">승인</button>
+                </form>
+                <form th:action="@{'/admin/approvals/' + ${req.id} + '/reject'}" method="post" style="display:inline">
+                    <button class="btn btn-danger" type="submit">반려</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: header}" />
+<body>
+<div class="container">
+    <h2>회원 목록</h2>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>이름</th><th>이메일</th><th>부서</th><th>역할</th><th>서명</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="member : ${members}">
+            <td th:text="${member.name}"></td>
+            <td th:text="${member.email}"></td>
+            <td th:text="${member.department.name}"></td>
+            <td th:text="${member.role.name}"></td>
+            <td th:text="${member.signatureImage != null ? '있음' : '없음'}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

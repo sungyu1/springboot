@@ -1,0 +1,292 @@
+@import url(fontawesome-all.min.css);
+@import url("https://fonts.googleapis.com/css?family=Open+Sans:400,600,400italic,600italic|Roboto+Slab:400,700");
+
+/* Reset and Basic Styles */
+html, body, div, span, applet, object,
+iframe, h1, h2, h3, h4, h5, h6, p, blockquote,
+pre, a, abbr, acronym, address, big, cite,
+code, del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var, b,
+u, i, center, dl, dt, dd, ol, ul, li, fieldset,
+form, label, legend, table, caption, tbody,
+tfoot, thead, tr, th, td, article, aside,
+canvas, details, embed, figure, figcaption,
+footer, header, hgroup, menu, nav, output, ruby,
+section, summary, time, mark, audio, video {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
+}
+
+body {
+    background: #ffffff;
+    color: #7f888f;
+    font-family: "Open Sans", sans-serif;
+    font-size: 13pt;
+    font-weight: 400;
+    line-height: 1.65;
+    -webkit-text-size-adjust: none;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: #3d4449;
+    font-family: "Roboto Slab", serif;
+    font-weight: 700;
+    line-height: 1.5;
+    margin: 0 0 1em 0;
+}
+
+h1 {
+    font-size: 4em;
+    margin: 0 0 0.5em 0;
+    line-height: 1.3;
+}
+
+p {
+    margin: 0 0 2em 0;
+}
+
+a {
+    transition: color 0.2s ease-in-out, border-bottom-color 0.2s ease-in-out;
+    border-bottom: dotted 1px;
+    color: #f56a6a;
+    text-decoration: none;
+}
+
+a:hover {
+    border-bottom-color: #f56a6a;
+    color: #f56a6a !important;
+}
+
+/* Main Container */
+.main-wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2em;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* Hero Section */
+.hero-section {
+    background: linear-gradient(135deg, #f5f6f7 0%, #ffffff 100%);
+    border-radius: 0.375em;
+    border: solid 1px rgba(210, 215, 217, 0.75);
+    padding: 4em 3em;
+    text-align: center;
+    margin: 2em 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.hero-section h1 {
+    color: #3d4449;
+    font-size: 3.5em;
+    margin-bottom: 0.5em;
+    font-weight: 700;
+}
+
+.hero-section .subtitle {
+    font-family: "Roboto Slab", serif;
+    font-size: 1.2em;
+    color: #7f888f;
+    margin-bottom: 2em;
+    font-weight: 400;
+    letter-spacing: 0.05em;
+}
+
+/* Button Styles */
+.action-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 1.5em;
+    flex-wrap: wrap;
+}
+
+.primary-button {
+    appearance: none;
+    transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out, transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    background-color: #f56a6a;
+    border-radius: 0.375em;
+    border: 0;
+    color: #ffffff !important;
+    cursor: pointer;
+    display: inline-block;
+    font-family: "Roboto Slab", serif;
+    font-size: 0.9em;
+    font-weight: 700;
+    height: 3.5em;
+    letter-spacing: 0.075em;
+    line-height: 3.5em;
+    padding: 0 2.5em;
+    text-align: center;
+    text-decoration: none;
+    text-transform: uppercase;
+    white-space: nowrap;
+    box-shadow: 0 2px 6px rgba(245, 106, 106, 0.3);
+}
+
+.primary-button:hover {
+    background-color: #f67878;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(245, 106, 106, 0.4);
+    border-bottom: none;
+}
+
+.secondary-button {
+    appearance: none;
+    transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out, transform 0.2s ease-in-out;
+    background-color: transparent;
+    border-radius: 0.375em;
+    border: 0;
+    box-shadow: inset 0 0 0 2px #f56a6a;
+    color: #f56a6a !important;
+    cursor: pointer;
+    display: inline-block;
+    font-family: "Roboto Slab", serif;
+    font-size: 0.9em;
+    font-weight: 700;
+    height: 3.5em;
+    letter-spacing: 0.075em;
+    line-height: 3.5em;
+    padding: 0 2.5em;
+    text-align: center;
+    text-decoration: none;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.secondary-button:hover {
+    background-color: rgba(245, 106, 106, 0.05);
+    transform: translateY(-2px);
+    border-bottom: none;
+}
+
+/* Features Section */
+.features-section {
+    margin: 4em 0;
+}
+
+.feature-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2em;
+    margin-top: 2em;
+}
+
+.feature-card {
+    background: #ffffff;
+    border-radius: 0.375em;
+    border: solid 1px rgba(210, 215, 217, 0.75);
+    padding: 2em;
+    text-align: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+.feature-icon {
+    width: 4em;
+    height: 4em;
+    margin: 0 auto 1.5em auto;
+    background: linear-gradient(135deg, #f56a6a, #f67878);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5em;
+    color: #ffffff;
+}
+
+.feature-card h3 {
+    color: #3d4449;
+    font-size: 1.25em;
+    margin-bottom: 1em;
+}
+
+.feature-card p {
+    color: #7f888f;
+    line-height: 1.6;
+    margin-bottom: 0;
+}
+
+/* Responsive Design */
+@media screen and (max-width: 1680px) {
+    body {
+        font-size: 11pt;
+    }
+
+    h1 {
+        font-size: 3.5em;
+    }
+}
+
+@media screen and (max-width: 1280px) {
+    body {
+        font-size: 10pt;
+    }
+}
+
+@media screen and (max-width: 980px) {
+    h1 {
+        font-size: 3.25em;
+    }
+}
+
+@media screen and (max-width: 736px) {
+    .main-wrapper {
+        padding: 1em;
+    }
+
+    .hero-section {
+        padding: 2em 1.5em;
+    }
+
+    .hero-section h1 {
+        font-size: 2.5em;
+        line-height: 1.4;
+    }
+
+    .action-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .primary-button,
+    .secondary-button {
+        width: 100%;
+        max-width: 300px;
+    }
+
+    .feature-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5em;
+    }
+
+    h1 {
+        font-size: 2em;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .hero-section h1 {
+        font-size: 2em;
+    }
+
+    .hero-section .subtitle {
+        font-size: 1em;
+    }
+}
+
+@media screen and (max-width: 360px) {
+    body {
+        font-size: 9pt;
+    }
+}

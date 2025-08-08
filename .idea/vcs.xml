@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="VcsDirectoryMappings">
+    <mapping directory="" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/springproject/Recat" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/springproject/spring_project" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/springproject/springproject" vcs="Git" />
+  </component>
+</project>

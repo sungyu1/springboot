@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: header}" />
+<body>
+<div class="container">
+  <div th:replace="~{fragments/bodyHeader :: bodyHeader}" />
+  <h2>관리자 대시보드</h2>
+  <ul>
+    <li>총 회원 수: <span th:text="${memberCount}"></span></li>
+    <li>총 부서 수: <span th:text="${departmentCount}"></span></li>
+    <li>대기 중 휴가 신청 수: <span th:text="${pendingVacations}"></span></li>
+  </ul>
+  <hr/>
+  <a class="btn btn-primary" href="/admin/members">회원 관리</a>
+  <a class="btn btn-primary" href="/admin/departments">부서 관리</a>
+  <a class="btn btn-primary" href="/admin/roles">역할 관리</a>
+  <a class="btn btn-primary" href="/admin/vacation-types">휴가유형 관리</a>
+  <a class="btn btn-primary" href="/admin/approvals">휴가 승인 관리</a>
+</div>
+</body>
+</html>

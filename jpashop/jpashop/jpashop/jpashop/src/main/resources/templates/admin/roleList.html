@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: header}" />
+<body>
+<div class="container">
+    <h2>역할 관리</h2>
+    <form action="/admin/roles/add" method="post">
+        <input type="text" name="name" placeholder="역할 이름" required />
+        <button class="btn btn-primary" type="submit">추가</button>
+    </form>
+    <table class="table">
+        <thead><tr><th>역할명</th><th>삭제</th></tr></thead>
+        <tbody>
+        <tr th:each="role : ${roles}">
+            <td th:text="${role.name}"></td>
+            <td><form th:action="@{'/admin/roles/delete/' + ${role.id}}" method="post">
+                <button class="btn btn-danger" type="submit">삭제</button>
+            </form></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

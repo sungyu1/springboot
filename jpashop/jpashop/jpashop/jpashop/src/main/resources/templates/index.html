@@ -1,0 +1,118 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Editorial by HTML5 UP</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/fontawesome-all.min.css}" />
+    <link rel="stylesheet" th:href="@{/css/main.css}" />
+</head>
+<body class="is-preload">
+
+<!-- Wrapper -->
+<div id="wrapper">
+
+    <!-- Main -->
+    <div id="main">
+        <div class="inner">
+
+            <!-- Header -->
+            <header id="header">
+                <a href="/index" class="logo"><strong>선한병원</strong></a>
+            </header>
+
+            <!-- Section: 내가 신청한 리스트 -->
+            <section>
+                <header class="major">
+                    <h2>내가 신청한 항목</h2>
+                </header>
+                <div class="posts">
+                    <article>
+                        <h3>근로계약서</h3>
+                        <p><strong>신청일:</strong> 2024-01-15</p>
+                        <p><strong>상태:</strong> <span style="color: orange;">승인 대기</span></p>
+                        <p>신입사원 근로계약서 작성 및 검토 요청</p>
+                        <ul class="actions">
+                            <li><a href="#" class="button">상세보기</a></li>
+                        </ul>
+                    </article>
+                    <article>
+                        <h3>휴가원</h3>
+                        <p><strong>신청일:</strong> 2024-01-10</p>
+                        <p><strong>상태:</strong> <span style="color: green;">승인완료</span></p>
+                        <p>연차휴가 3일 사용 신청 (2024-01-25 ~ 2024-01-27)</p>
+                        <ul class="actions">
+                            <li><a href="#" class="button">상세보기</a></li>
+                        </ul>
+                    </article>
+                    <article>
+                        <h3>근로계약서</h3>
+                        <p><strong>신청일:</strong> 2024-01-08</p>
+                        <p><strong>상태:</strong> <span style="color: red;">반려</span></p>
+                        <p>계약 조건 변경 요청 - 추가 서류 필요</p>
+                        <ul class="actions">
+                            <li><a href="#" class="button">상세보기</a></li>
+                        </ul>
+                    </article>
+                </div>
+            </section>
+
+            <!-- Section: 내가 결제해줘야 하는 리스트 -->
+            <section>
+                <header class="major">
+                    <h2>결제 대기 항목</h2>
+                </header>
+                <div class="posts">
+                    <article>
+                        <h3>휴가원</h3>
+                        <p><strong>신청자:</strong> 김철수</p>
+                        <p><strong>신청일:</strong> 2024-01-16</p>
+                        <p><strong>기간:</strong> 2024-02-01 ~ 2024-02-03</p>
+                        <p>병가 3일 신청 - 의사 진단서 첨부</p>
+                        <ul class="actions">
+                            <li><a href="#" class="button primary">승인</a></li>
+                            <li><a href="#" class="button">반려</a></li>
+                        </ul>
+                    </article>
+                    <article>
+                        <h3>근로계약서</h3>
+                        <p><strong>신청자:</strong> 이영희</p>
+                        <p><strong>신청일:</strong> 2024-01-14</p>
+                        <p><strong>내용:</strong> 정규직 전환 계약서</p>
+                        <p>인턴십 종료 후 정규직 전환 계약 검토</p>
+                        <ul class="actions">
+                            <li><a href="#" class="button primary">승인</a></li>
+                            <li><a href="#" class="button">반려</a></li>
+                        </ul>
+                    </article>
+                    <article>
+                        <h3>휴가원</h3>
+                        <p><strong>신청자:</strong> 박민수</p>
+                        <p><strong>신청일:</strong> 2024-01-12</p>
+                        <p><strong>기간:</strong> 2024-01-30 ~ 2024-01-31</p>
+                        <p>개인사유 휴가 2일 신청</p>
+                        <ul class="actions">
+                            <li><a href="#" class="button primary">승인</a></li>
+                            <li><a href="#" class="button">반려</a></li>
+                        </ul>
+                    </article>
+                </div>
+            </section>
+        </div>
+    </div>
+    <!-- Sidebar -->
+    <div th:replace="~{fragments/sidebar :: #sidebar}" /></div>
+
+<!-- Scripts -->
+<script th:src="@{/js/jquery.min.js}"></script>
+<script th:src="@{/js/bootstrap.bundle.js}"></script> <!-- 필요시 -->
+<script th:src="@{/js/browser.min.js}"></script>
+<script th:src="@{/js/breakpoints.min.js}"></script>
+<script th:src="@{/js/util.js}"></script>
+<script th:src="@{/js/main.js}"></script>
+<!-- 로그아웃 모달용 JS -->
+<script th:src="@{/js/logout-confirm.js}"></script>
+
+</body>
+</html>

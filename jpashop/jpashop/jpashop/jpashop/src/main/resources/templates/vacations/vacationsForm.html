@@ -1,0 +1,261 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>휴가원작성</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <link rel="stylesheet" th:href="@{/css/fontawesome-all.min.css}" />
+  <link rel="stylesheet" th:href="@{/css/main.css}" />
+
+  <style>
+    body {
+      background-color: #ffffff;
+    }
+
+    .form-container {
+      max-width: 800px;
+      margin: 40px auto;
+      background: #f7f7f7;
+      padding: 40px 50px;
+      border-radius: 10px;
+      box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
+    }
+
+    .approval-line {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 30px;
+      text-align: center;
+    }
+
+    .approval-line th,
+    .approval-line td {
+      border: 1px solid #ccc;
+      padding: 10px;
+      font-size: 14px;
+    }
+
+    .approval-line th[rowspan] {
+      background-color: #e4f3e2;
+      font-weight: bold;
+      writing-mode: vertical-rl;
+    }
+
+    .approval-role {
+      background-color: #f2f2f2;
+    }
+
+    .approval-cell select {
+      width: 100px;
+    }
+
+    .signature-img {
+      margin-top: 8px;
+      height: 40px;
+    }
+
+    .actions {
+      text-align: center;
+      margin-top: 30px;
+    }
+
+    .actions input {
+      padding: 10px 20px;
+      margin: 0 8px;
+      font-size: 15px;
+      cursor: pointer;
+    }
+
+    .primary {
+      background-color: #e65959;
+      border: none;
+      color: white;
+      border-radius: 4px;
+    }
+
+    .actions input[type="reset"] {
+      background-color: white;
+      color: #e65959;
+      border: 1px solid #e65959;
+      border-radius: 4px;
+    }
+  </style>
+
+</head>
+<body class="is-preload">
+
+<!-- Wrapper -->
+<div id="wrapper">
+
+  <!-- Main -->
+  <div id="main">
+    <div class="inner">
+
+      <!-- Header -->
+      <header id="header">
+        <a href="/index" class="logo"><strong>선한병원</strong></a>
+      </header>
+
+      <!-- Section: 내가 신청한 리스트 -->
+      <section>
+        <header class="major">
+          <h2>휴가원 작성</h2>
+        </header>
+
+        <div class="form-container">
+          <form th:action="@{/vacation/submit}" th:object="${vacationRequestForm}" method="post">
+            <h3 style="text-align: center;">결재 라인</h3>
+            <table class="approval-line">
+              <tr>
+                <th rowspan="2">결 재</th>
+                <th class="approval-role">대직자</th>
+                <th class="approval-role">부서장</th>
+                <th class="approval-role">인사담당</th>
+                <th class="approval-role">진료지원센터장</th>
+                <th class="approval-role">행정원장</th>
+                <th class="approval-role">대표원장</th>
+              </tr>
+              <tr>
+                <td class="approval-cell">
+                  <select th:field="*{substituteId}" class="form-control" required>
+                    <option th:each="member : ${substitutes}"
+                            th:value="${member.id}"
+                            th:text="${member.name}">
+                    </option>
+                  </select>
+                  <img id="sign1" class="signature-img" style="display:none;" />
+                </td>
+                <td class="approval-cell">
+                  <select th:field="*{deptLeaderId}" class="form-control" required>
+                    <option th:each="leader : ${deptLeaders}"
+                            th:value="${leader.id}"
+                            th:text="${leader.name}"></option>
+                  </select>
+                  <img id="sign2" class="signature-img" style="display:none;" />
+                </td>
+                <td class="approval-cell">
+                  <select onchange="setApprovalSign(this, 'sign3')">
+                    <option value="">선택</option>
+                    <option value="park">박부장</option>
+                    <option value="yoon">윤대리</option>
+                  </select>
+                  <img id="sign3" class="signature-img" style="display:none;" />
+                </td>
+                <td class="approval-cell">
+                  <select onchange="setApprovalSign(this, 'sign4')">
+                    <option value="">선택</option>
+                    <option value="ceo1">대표A</option>
+                    <option value="ceo2">대표B</option>
+                  </select>
+                  <img id="sign4" class="signature-img" style="display:none;" />
+                </td>
+              </tr>
+            </table>
+
+            <div class="field"><label>이름</label><input type="text" name="name" th:value="${loginMember.name}" readonly></div>
+            <div class="field"><label>소속 부서</label><input type="text" name="deptCode" th:value="${deptName}" readonly></div>
+            <div class="field"><label>직위</label><input type="text" name="jobType" th:value="${jobTypeName}" readonly></div>
+
+            <div class="field"><label>휴가 종류</label>
+              <select name="type" required>
+                <option value="">선택</option>
+                <option value="연차">연차</option>
+                <option value="병가">병가</option>
+                <option value="특별휴가">특별휴가</option>
+                <option value="기타">기타</option>
+              </select>
+            </div>
+            <div class="field"><label>시작일</label><input type="date" name="startDate" required></div>
+            <div class="field"><label>종료일</label><input type="date" name="endDate" required></div>
+            <div class="field"><label>총 일수</label><input type="number" name="days" id="days" min="1" readonly /></div>
+            <div class="field"><label>사유</label><textarea name="reason" rows="4" placeholder="휴가 사유를 입력하세요" required></textarea></div>
+            <div class="field"><label>비상연락처</label><input type="tel" name="contact" placeholder="예: 010-1234-5678" required></div>
+            <div class="field"><label>제출일</label><input type="datetime-local" name="submitDate" id="submitDate" readonly /></div>
+            <div class="form-group">
+              <label>본인 서명</label><br>
+              <!-- 서명 미리보기 -->
+              <img id="signaturePreview" style="border:1px solid #000; max-height:100px; display:none;" />
+              <!-- 확인 버튼 -->
+              <button type="button" class="btn btn-secondary mt-2" onclick="showSignature()">서명 확인</button>
+              <!-- hidden 필드: 제출 시 서명값 포함 -->
+              <input type="hidden" name="signatureImage" id="signatureImage" />
+            </div>
+            <div class="actions">
+              <button type="submit" class="primary">제출</button>
+              <button type="reset">취소</button>
+            </div>
+          </form>
+        </div>
+      </section>
+
+
+    </div>
+  </div>
+  <!-- Sidebar -->
+  <div th:replace="~{fragments/sidebar :: #sidebar}" />
+  <!-- end idebar -->
+</div>
+
+<!--제출일 자동 으로 저장-->
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const now = new Date();
+    const offset = now.getTimezoneOffset();
+    const localDate = new Date(now.getTime() - offset * 60 * 1000);
+    const formatted = localDate.toISOString().slice(0, 16); // yyyy-MM-ddTHH:mm
+
+    const submitDateField = document.getElementById("submitDate");
+    if (submitDateField) {
+      submitDateField.value = formatted;
+    }
+  });
+
+</script>
+
+<!--휴가 시작일 종료일 선택 자동 계산 해서 총 일수에 입력-->
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const startDateInput = document.querySelector("input[name='startDate']");
+    const endDateInput = document.querySelector("input[name='endDate']");
+    const daysInput = document.querySelector("input[name='days']");
+
+    function calculateDays() {
+      const start = new Date(startDateInput.value);
+      const end = new Date(endDateInput.value);
+      if (start && end && !isNaN(start) && !isNaN(end)) {
+        const timeDiff = end - start;
+        const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24)) + 1; // 시작일 포함
+        if (days > 0) {
+          daysInput.value = days;
+        } else {
+          daysInput.value = "";
+        }
+      }
+    }
+
+    startDateInput.addEventListener("change", calculateDays);
+    endDateInput.addEventListener("change", calculateDays);
+  });
+  // 휴가원 서명 입력
+  function showSignature() {
+    const signatureData = /*[[${loginMember.signatureImage}]]*/ '';
+    if (signatureData) {
+      const img = document.getElementById('signaturePreview');
+      img.src = signatureData;
+      img.style.display = 'block';
+      document.getElementById('signatureImage').value = signatureData;
+    } else {
+      alert('등록된 서명이 없습니다. 회원정보에서 서명을 등록해주세요.');
+    }
+  }
+</script>
+<!-- Scripts -->
+<script th:src="@{/js/jquery.min.js}"></script>
+<script th:src="@{/js/bootstrap.bundle.js}"></script> <!-- 필요시 -->
+<script th:src="@{/js/browser.min.js}"></script>
+<script th:src="@{/js/breakpoints.min.js}"></script>
+<script th:src="@{/js/util.js}"></script>
+<script th:src="@{/js/main.js}"></script>
+</body>
+</html>

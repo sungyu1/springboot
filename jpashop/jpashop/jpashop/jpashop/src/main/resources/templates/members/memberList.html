@@ -1,0 +1,70 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: header}" />
+<body>
+<div class="container">
+  <div th:replace="~{fragments/bodyHeader :: bodyHeader}" />
+  <div>
+    <table class="table table-striped">
+      <thead>
+      <tr>
+        <th>ID</th>
+        <th>이름</th>
+        <th>이메일</th>
+        <th>부서</th>
+        <th>직무유형</th>
+        <th>근무상태</th>
+        <th>전화번호</th>
+        <th>주소</th>
+        <th>우편번호</th>
+        <th>서명</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="member : ${members}">
+        <td th:text="${member.id}"></td>
+        <td th:text="${member.name}"></td>
+        <td th:text="${member.email}"></td>
+
+        <!-- 부서코드 해석 -->
+        <td th:switch="${member.deptCode}">
+          <span th:case="'im'">내과</span>
+          <span th:case="'gs'">외과</span>
+          <span th:case="'ns'">신경외과</span>
+          <span th:case="'os'">정형외과</span>
+          <span th:case="'cs'">흉부외과</span>
+          <span th:case="'ms'">진료지원센터</span>
+          <span th:case="*">기타</span>
+        </td>
+
+        <!-- 직무유형 숫자 해석 -->
+        <td th:switch="${member.jobType}">
+          <span th:case="1">사원</span>
+          <span th:case="2">부서장</span>
+          <span th:case="3">원장</span>
+          <span th:case="4">진료지원</span>
+          <span th:case="5">센터장</span>
+          <span th:case="*">기타</span>
+        </td>
+
+        <!-- 근무상태 숫자 해석 -->
+        <td th:switch="${member.useFlag}">
+          <span th:case="1">근무</span>
+          <span th:case="0">퇴사</span>
+          <span th:case="*">-</span>
+        </td>
+
+        <td th:text="${member.phone}"></td>
+        <td th:text="${member.address?.city}"></td>
+        <td th:text="${member.address?.zipcode}"></td>
+        <td>
+          <img th:if="${member.signatureImage}" th:src="${member.signatureImage}" alt="서명" style="max-height: 50px;">
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+  <div th:replace="~{fragments/footer :: footer}" />
+</div> <!-- /container -->
+</body>
+</html>

@@ -1,0 +1,63 @@
+<div id="sidebar">
+    <div class="inner">
+
+        <!-- Search -->
+        <section id="search" class="alt">
+            <form method="post" action="#">
+                <input type="text" name="query" id="query" placeholder="Search" />
+            </form>
+        </section>
+
+        <!-- Menu -->
+        <nav id="menu">
+            <header class="major">
+                <h2>Menu</h2>
+            </header>
+            <ul>
+                <li><a th:href="@{/index}">홈페이지</a></li>
+                <li><a th:href="@{/contract}">근로계약서</a></li>
+                <li><a th:href="@{/vacation/form}">휴가원</a></li>
+                <li th:if="${loginMember != null and loginMember.id == 'admin'}">
+                    <a th:href="@{/members/memberList.html}">회원 목록</a>
+                </li>
+            </ul>
+        </nav>
+
+
+
+        <!-- Section -->
+        <section th:if="${loginMember != null}">
+            <header class="major">
+                <h2>나의 정보</h2>
+            </header>
+
+            <ul class="contact">
+                <li>
+                    <!-- 로그아웃 버튼 -->
+                    <div id="logoutSection"></div>
+                </li>
+                <li class="icon solid fa-user">
+                    <span th:text="${loginMember.name}">이름</span>
+                </li>
+                <li class="icon solid fa-building">
+                    <span th:text="${deptName}">부서</span>
+                </li>
+                <li class="icon solid fa-briefcase">
+                    <span th:text="${jobTypeName}">직무</span>
+                </li>
+                <li class="icon solid fa-phone">
+                    <span th:text="${loginMember.phone}">전화번호</span>
+                </li>
+            </ul>
+        </section>
+
+        <!-- Footer -->
+        <footer id="footer">
+            <p class="copyright">&copy; Untitled. All rights reserved. Demo Images: <a href="https://unsplash.com">Unsplash</a>. Design: <a href="https://html5up.net">HTML5 UP</a>.</p>
+        </footer>
+    </div>
+</div>
+
+
+
+
