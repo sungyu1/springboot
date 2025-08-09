@@ -3,6 +3,8 @@ package jpabook.jpashop.service;
 import jpabook.jpashop.controller.VacationRequestForm;
 import jpabook.jpashop.domain.*;
 import jpabook.jpashop.domain.oracle.OracleUser;
+import jpabook.jpashop.exception.BadCredentialsException;
+import jpabook.jpashop.exception.NoSuchMemberException;
 import jpabook.jpashop.repository.MemberRepository;
 import jpabook.jpashop.repository.oracle.OracleUserRepository;
 import lombok.RequiredArgsConstructor;
@@ -68,8 +70,15 @@ public class MemberService {
      */
     @Transactional(readOnly = true)
     public Member login(String id, String password) {
-        return memberRepository.findByIdAndPassword(id, password)
-                .orElseThrow(() -> new IllegalArgumentException("아이디 또는 비밀번호가 일치하지 않습니다."));
+        Member member = memberRepository.findOne(id);
+        if (member == null) {
+            throw new NoSuchMemberException();
+        }
+        // 해시가 아니라면 현행 그대로 비교
+        if (!member.getPassword().equals(password)) {
+            throw new BadCredentialsException();
+        }
+        return member;
     }
 
 

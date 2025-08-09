@@ -40,19 +40,29 @@
 </div>
 <div th:if="${noMember}" id="noMemberModalTrigger"></div>
 
-<!-- 회원정보가 없을경우 회워가입페이지로 이동 -->
-<div class="modal fade" id="noMemberModal" tabindex="-1" aria-labelledby="noMemberModalLabel" aria-hidden="true">
+<div class="modal fade" id="modal-signup" tabindex="-1" aria-labelledby="modalSignupLabel" aria-hidden="true"
+     th:if="${signupRecommend}">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="noMemberModalLabel">알림</h5>
-            </div>
-            <div class="modal-body">
-                회원정보가 없습니다. 회원가입 페이지로 이동하시겠습니까?
-            </div>
+            <div class="modal-header"><h5 class="modal-title" id="modalSignupLabel">알림</h5></div>
+            <div class="modal-body">입력하신 아이디가 없습니다. 회원가입 페이지로 이동하시겠습니까?</div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" onclick="location.href='/members/new'">예</button>
-                <button type="button" class="btn btn-secondary" onclick="location.href='/members/login'">아니오</button>
+                <a class="btn btn-primary" th:href="@{/members/new}">예</a>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">아니오</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 비밀번호 불일치 안내 모달 -->
+<div class="modal fade" id="modal-bad" tabindex="-1" aria-labelledby="modalBadLabel" aria-hidden="true"
+     th:if="${badCredentials}">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header"><h5 class="modal-title" id="modalBadLabel">로그인 실패</h5></div>
+            <div class="modal-body">아이디와 비밀번호를 다시 확인해 주세요.</div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">확인</button>
             </div>
         </div>
     </div>

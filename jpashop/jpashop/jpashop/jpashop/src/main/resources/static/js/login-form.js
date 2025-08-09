@@ -1,7 +1,8 @@
+// /static/js/login-form.js
 window.addEventListener('DOMContentLoaded', () => {
-    const trigger = document.getElementById('noMemberModalTrigger');
-    if (trigger) {
-        const modal = new bootstrap.Modal(document.getElementById('noMemberModal'));
-        modal.show();
-    }
+    const signupModal = document.getElementById('modal-signup');
+    if (signupModal) new bootstrap.Modal(signupModal).show();
+
+    const badModal = document.getElementById('modal-bad');
+    if (badModal) new bootstrap.Modal(badModal).show();
 });
