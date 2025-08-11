@@ -84,15 +84,19 @@
         <div class="editorial-col-6">
           <div class="editorial-form-group">
             <label class="editorial-label" th:for="city">도시</label>
-            <input type="text" th:field="*{city}" class="editorial-input" placeholder="도시를 입력하세요">
+            <input type="text" th:field="*{city}" class="editorial-input" placeholder="도시를 입력하세요"
+            th:class="${#fields.hasErrors('city')} ? 'editorial-input editorial-field-error' : 'editorial-input'">
+            <span class="error-message" th:if="${#fields.hasErrors('city')}" th:errors="*{city}"></span>
           </div>
         </div>
 
         <!-- 우편번호 -->
         <div class="editorial-col-6">
           <div class="editorial-form-group">
-            <label class="editorial-label" th:for="zipcode">우편번호</label>
-            <input type="text" th:field="*{zipcode}" class="editorial-input" placeholder="우편번호를 입력하세요">
+            <label class="editorial-label" th:for="zipcode">도로명주소</label>
+            <input type="text" th:field="*{zipcode}" class="editorial-input" placeholder="우편번호를 입력하세요"
+                   th:class="${#fields.hasErrors('zipcode')} ? 'editorial-input editorial-field-error' : 'editorial-input'">
+            <span class="error-message" th:if="${#fields.hasErrors('zipcode')}" th:errors="*{zipcode}"></span>
           </div>
         </div>
       </div>
@@ -107,7 +111,8 @@
         <div class="editorial-col-6">
           <div class="editorial-form-group">
             <label class="editorial-label" th:for="deptCode">부서</label>
-            <select th:field="*{deptCode}" class="editorial-select">
+            <select th:field="*{deptCode}" class="editorial-select"
+                    th:classappend="${#fields.hasErrors('deptCode')} ? ' editorial-field-error'">
               <option value="">-- 선택하세요 --</option>
               <option value="im">내과</option>
               <option value="gs">외과</option>
@@ -116,8 +121,8 @@
               <option value="cs">흉부외과</option>
               <option value="ms">진료지원센터</option>
               <option value="am">관리자</option>
-
             </select>
+            <span class="error-message" th:if="${#fields.hasErrors('deptCode')}" th:errors="*{deptCode}"></span>
           </div>
         </div>
 
@@ -125,7 +130,8 @@
         <div class="editorial-col-6">
           <div class="editorial-form-group">
             <label class="editorial-label" th:for="jobType">직무 유형</label>
-            <select th:field="*{jobType}" class="editorial-select">
+            <select th:field="*{jobType}" class="editorial-select"
+                    th:classappend="${#fields.hasErrors('jobType')} ? ' editorial-field-error'">
               <option value="">-- 선택하세요 --</option>
               <option value="1">사원</option>
               <option value="2">부서장</option>
@@ -134,6 +140,7 @@
               <option value="5">센터장</option>
               <option value="6">관리자</option>
             </select>
+            <span class="error-message" th:if="${#fields.hasErrors('jobType')}" th:errors="*{jobType}"></span>
           </div>
         </div>
       </div>
@@ -143,10 +150,12 @@
         <div class="editorial-col-6">
           <div class="editorial-form-group">
             <label class="editorial-label" th:for="useFlag">근무 상태</label>
-            <select th:field="*{useFlag}" class="editorial-select">
+            <select th:field="*{useFlag}" class="editorial-select"
+                    th:classappend="${#fields.hasErrors('useFlag')} ? ' editorial-field-error'">
               <option value="1">근무</option>
               <option value="0">퇴사</option>
             </select>
+            <span class="error-message" th:if="${#fields.hasErrors('useFlag')}" th:errors="*{useFlag}"></span>
           </div>
         </div>
       </div>

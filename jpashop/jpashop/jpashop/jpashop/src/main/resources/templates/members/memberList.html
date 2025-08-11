@@ -1,10 +1,13 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/header :: header}" />
+<title>Editorial by HTML5 UP</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+<link rel="stylesheet" th:href="@{/css/main.css}" />
+<link rel="stylesheet" th:href="@{/css/members.css}">
 <body>
 <div class="container">
-  <div th:replace="~{fragments/bodyHeader :: bodyHeader}" />
-  <div>
+  <div class="table-wrapper"><!-- 가로 스크롤 안전 -->
     <table class="table table-striped">
       <thead>
       <tr>
@@ -20,51 +23,56 @@
         <th>서명</th>
       </tr>
       </thead>
+
       <tbody>
       <tr th:each="member : ${members}">
         <td th:text="${member.id}"></td>
         <td th:text="${member.name}"></td>
         <td th:text="${member.email}"></td>
 
-        <!-- 부서코드 해석 -->
+        <!-- 부서코드 해석 + 배지 -->
         <td th:switch="${member.deptCode}">
-          <span th:case="'im'">내과</span>
-          <span th:case="'gs'">외과</span>
-          <span th:case="'ns'">신경외과</span>
-          <span th:case="'os'">정형외과</span>
-          <span th:case="'cs'">흉부외과</span>
-          <span th:case="'ms'">진료지원센터</span>
-          <span th:case="*">기타</span>
+          <span class="dept-badge" th:case="'im'">내과</span>
+          <span class="dept-badge" th:case="'gs'">외과</span>
+          <span class="dept-badge" th:case="'ns'">신경외과</span>
+          <span class="dept-badge" th:case="'os'">정형외과</span>
+          <span class="dept-badge" th:case="'cs'">흉부외과</span>
+          <span class="dept-badge" th:case="'ms'">진료지원센터</span>
+          <span class="dept-badge" th:case="*">기타</span>
         </td>
 
-        <!-- 직무유형 숫자 해석 -->
+        <!-- 직무유형 + 배지 -->
         <td th:switch="${member.jobType}">
-          <span th:case="1">사원</span>
-          <span th:case="2">부서장</span>
-          <span th:case="3">원장</span>
-          <span th:case="4">진료지원</span>
-          <span th:case="5">센터장</span>
-          <span th:case="*">기타</span>
+          <span class="job-badge" th:case="1">사원</span>
+          <span class="job-badge" th:case="2">부서장</span>
+          <span class="job-badge" th:case="3">원장</span>
+          <span class="job-badge" th:case="4">진료지원</span>
+          <span class="job-badge" th:case="5">센터장</span>
+          <span class="job-badge" th:case="*">기타</span>
         </td>
 
-        <!-- 근무상태 숫자 해석 -->
+        <!-- 근무상태 + 배지(색상 분기) -->
         <td th:switch="${member.useFlag}">
-          <span th:case="1">근무</span>
-          <span th:case="0">퇴사</span>
-          <span th:case="*">-</span>
+          <span class="status-badge status-active" th:case="1">근무</span>
+          <span class="status-badge status-inactive" th:case="0">퇴사</span>
+          <span class="status-badge" th:case="*">-</span>
         </td>
 
         <td th:text="${member.phone}"></td>
         <td th:text="${member.address?.city}"></td>
         <td th:text="${member.address?.zipcode}"></td>
         <td>
-          <img th:if="${member.signatureImage}" th:src="${member.signatureImage}" alt="서명" style="max-height: 50px;">
+          <img class="signature-img"
+               th:if="${member.signatureImage}"
+               th:src="${member.signatureImage}"
+               alt="서명">
         </td>
       </tr>
       </tbody>
     </table>
   </div>
-  <div th:replace="~{fragments/footer :: footer}" />
+
+  <div th:replace="~{fragments/sidebar :: #sidebar}" /></div>
 </div> <!-- /container -->
 </body>
 </html>

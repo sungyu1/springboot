@@ -9,6 +9,7 @@ import jpabook.jpashop.repository.MemberRepository;
 import jpabook.jpashop.repository.oracle.OracleUserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,6 +23,7 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
     private final OracleUserRepository oracleUserRepository; // 🔴 이 라인 추가 필요
+    private final PasswordEncoder passwordEncoder;
 
     /**
      * 회원가입
@@ -29,6 +31,7 @@ public class MemberService {
     @Transactional(readOnly = false) //쓰기에는 readOnly= false
     public String join(Member member) {
         validateDuplicateMember(member); // 중복회원 있는지 검증
+        member.setPassword(passwordEncoder.encode(member.getPassword()));
         memberRepository.save(member);
         return member.getId();
     }
@@ -69,17 +72,42 @@ public class MemberService {
      * 로그인 (로컬 DB 기준)
      */
     @Transactional(readOnly = true)
-    public Member login(String id, String password) {
+    public Member login(String id, String rawPassword) {
         Member member = memberRepository.findOne(id);
         if (member == null) {
             throw new NoSuchMemberException();
         }
-        // 해시가 아니라면 현행 그대로 비교
-        if (!member.getPassword().equals(password)) {
+
+        String stored = member.getPassword();
+        boolean looksHashed = stored != null && stored.startsWith("$2"); // BCrypt 서명($2a/$2b/$2y)
+
+        boolean ok = looksHashed
+                ? passwordEncoder.matches(rawPassword, stored)
+                : rawPassword.equals(stored); // 레거시 평문 허용
+
+        if (!ok) {
             throw new BadCredentialsException();
+        }
+
+        // ✅ (선택) 레거시 평문이면, 이번 로그인 성공을 계기로 즉시 해시로 업그레이드
+        if (!looksHashed) {
+            member.setPassword(passwordEncoder.encode(rawPassword));
+            // JPA dirty checking으로 자동 업데이트
         }
         return member;
     }
+//    @Transactional(readOnly = true)
+//    public Member login(String id, String password) {
+//        Member member = memberRepository.findOne(id);
+//        if (member == null) {
+//            throw new NoSuchMemberException();
+//        }
+//        // 해시가 아니라면 현행 그대로 비교
+//        if (!member.getPassword().equals(password)) {
+//            throw new BadCredentialsException();
+//        }
+//        return member;
+//    }
 
 
     // 추후 Oracle 연동 시 활성화할 수 있는 메서드
@@ -90,7 +118,8 @@ public class MemberService {
             Member newMember = new Member();
             newMember.setId(oracleUser.getUserId());
             newMember.setName(oracleUser.getName());
-            newMember.setPassword(rawPassword); // TODO: 암호화 적용 가능성
+            // 동기화 시에도 해시 저장
+            newMember.setPassword(passwordEncoder.encode(rawPassword));
             newMember.setAddress(new Address("oracleCity", "oracleStreet"));
             newMember.setSignatureImage(null);
             return memberRepository.save(newMember);
