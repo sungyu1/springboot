@@ -17,8 +17,8 @@
                 <li><a th:href="@{/index}">홈페이지</a></li>
                 <li><a th:href="@{/contract}">근로계약서</a></li>
                 <li><a th:href="@{/vacation/form}">휴가원</a></li>
-                <li th:if="${loginMember != null and loginMember.id == 'admin'}">
-                    <a th:href="@{/members/memberList.html}">회원 목록</a>
+                <li th:if="${session.loginMember != null and session.loginMember.id == 'admin'}">
+                    <a th:href="@{/members/memberList}">회원 목록</a>
                 </li>
             </ul>
         </nav>
@@ -26,7 +26,7 @@
 
 
         <!-- Section -->
-        <section th:if="${loginMember != null}">
+        <section th:if="${session.loginMember != null}">
             <header class="major">
                 <h2>나의 정보</h2>
             </header>
@@ -37,7 +37,7 @@
                     <div id="logoutSection"></div>
                 </li>
                 <li class="icon solid fa-user">
-                    <span th:text="${loginMember.name}">이름</span>
+                    <span th:text="${session.loginMember.name}">이름</span>
                 </li>
                 <li class="icon solid fa-building">
                     <span th:text="${deptName}">부서</span>
@@ -46,7 +46,7 @@
                     <span th:text="${jobTypeName}">직무</span>
                 </li>
                 <li class="icon solid fa-phone">
-                    <span th:text="${loginMember.phone}">전화번호</span>
+                    <span th:text="${session.loginMember.phone}">전화번호</span>
                 </li>
             </ul>
         </section>

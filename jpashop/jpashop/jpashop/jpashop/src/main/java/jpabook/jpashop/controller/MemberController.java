@@ -58,7 +58,7 @@ public class MemberController {
         return "redirect:/";
     }
 //  전체회원 목록조회
-    @GetMapping("/admin/memberList")
+    @GetMapping("/members/memberList")
     public String list(Model model){
         List<Member> members = memberService.findMembers();
         model.addAttribute("members", members);
