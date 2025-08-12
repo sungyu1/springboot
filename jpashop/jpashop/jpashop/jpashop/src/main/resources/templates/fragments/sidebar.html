@@ -4,7 +4,7 @@
         <!-- Search -->
         <section id="search" class="alt">
             <form method="post" action="#">
-                <input type="text" name="query" id="query" placeholder="Search" />
+                <input type="text" name="query" id="query" placeholder="Search"/>
             </form>
         </section>
 
@@ -24,7 +24,6 @@
         </nav>
 
 
-
         <!-- Section -->
         <section th:if="${session.loginMember != null}">
             <header class="major">
@@ -40,10 +39,26 @@
                     <span th:text="${session.loginMember.name}">이름</span>
                 </li>
                 <li class="icon solid fa-building">
-                    <span th:text="${deptName}">부서</span>
+          <span th:switch="${session.loginMember.deptCode}">
+            <span th:case="'im'">내과</span>
+            <span th:case="'gs'">외과</span>
+            <span th:case="'ns'">신경외과</span>
+            <span th:case="'os'">정형외과</span>
+            <span th:case="'cs'">흉부외과</span>
+            <span th:case="'ms'">진료지원센터</span>
+            <span th:case="*">기타</span>
+          </span>
                 </li>
                 <li class="icon solid fa-briefcase">
-                    <span th:text="${jobTypeName}">직무</span>
+          <span th:switch="${session.loginMember.jobType}">
+            <span th:case="1">사원</span>
+            <span th:case="2">부서장</span>
+            <span th:case="3">원장</span>
+            <span th:case="4">진료지원</span>
+            <span th:case="5">센터장</span>
+            <span th:case="6">관리자</span>
+            <span th:case="*">기타</span>
+          </span>
                 </li>
                 <li class="icon solid fa-phone">
                     <span th:text="${session.loginMember.phone}">전화번호</span>
@@ -53,7 +68,8 @@
 
         <!-- Footer -->
         <footer id="footer">
-            <p class="copyright">&copy; Untitled. All rights reserved. Demo Images: <a href="https://unsplash.com">Unsplash</a>. Design: <a href="https://html5up.net">HTML5 UP</a>.</p>
+            <p class="copyright">&copy; Untitled. All rights reserved. Demo Images: <a href="https://unsplash.com">Unsplash</a>.
+                Design: <a href="https://html5up.net">HTML5 UP</a>.</p>
         </footer>
     </div>
 </div>
