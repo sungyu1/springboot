@@ -6,82 +6,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
   <link rel="stylesheet" th:href="@{/css/fontawesome-all.min.css}" />
+  <link rel="stylesheet" th:href="@{/css/vacation-style.css}" />
   <link rel="stylesheet" th:href="@{/css/main.css}" />
-
-  <style>
-    body {
-      background-color: #ffffff;
-    }
-
-    .form-container {
-      max-width: 800px;
-      margin: 40px auto;
-      background: #f7f7f7;
-      padding: 40px 50px;
-      border-radius: 10px;
-      box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
-    }
-
-    .approval-line {
-      width: 100%;
-      border-collapse: collapse;
-      margin-bottom: 30px;
-      text-align: center;
-    }
-
-    .approval-line th,
-    .approval-line td {
-      border: 1px solid #ccc;
-      padding: 10px;
-      font-size: 14px;
-    }
-
-    .approval-line th[rowspan] {
-      background-color: #e4f3e2;
-      font-weight: bold;
-      writing-mode: vertical-rl;
-    }
-
-    .approval-role {
-      background-color: #f2f2f2;
-    }
-
-    .approval-cell select {
-      width: 100px;
-    }
-
-    .signature-img {
-      margin-top: 8px;
-      height: 40px;
-    }
-
-    .actions {
-      text-align: center;
-      margin-top: 30px;
-    }
-
-    .actions input {
-      padding: 10px 20px;
-      margin: 0 8px;
-      font-size: 15px;
-      cursor: pointer;
-    }
-
-    .primary {
-      background-color: #e65959;
-      border: none;
-      color: white;
-      border-radius: 4px;
-    }
-
-    .actions input[type="reset"] {
-      background-color: white;
-      color: #e65959;
-      border: 1px solid #e65959;
-      border-radius: 4px;
-    }
-  </style>
-
 </head>
 <body class="is-preload">
 
@@ -214,42 +140,7 @@
 </script>
 
 <!--휴가 시작일 종료일 선택 자동 계산 해서 총 일수에 입력-->
-<script>
-  document.addEventListener("DOMContentLoaded", function () {
-    const startDateInput = document.querySelector("input[name='startDate']");
-    const endDateInput = document.querySelector("input[name='endDate']");
-    const daysInput = document.querySelector("input[name='days']");
 
-    function calculateDays() {
-      const start = new Date(startDateInput.value);
-      const end = new Date(endDateInput.value);
-      if (start && end && !isNaN(start) && !isNaN(end)) {
-        const timeDiff = end - start;
-        const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24)) + 1; // 시작일 포함
-        if (days > 0) {
-          daysInput.value = days;
-        } else {
-          daysInput.value = "";
-        }
-      }
-    }
-
-    startDateInput.addEventListener("change", calculateDays);
-    endDateInput.addEventListener("change", calculateDays);
-  });
-  // 휴가원 서명 입력
-  function showSignature() {
-    const signatureData = /*[[${loginMember.signatureImage}]]*/ '';
-    if (signatureData) {
-      const img = document.getElementById('signaturePreview');
-      img.src = signatureData;
-      img.style.display = 'block';
-      document.getElementById('signatureImage').value = signatureData;
-    } else {
-      alert('등록된 서명이 없습니다. 회원정보에서 서명을 등록해주세요.');
-    }
-  }
-</script>
 <!-- Scripts -->
 <script th:src="@{/js/jquery.min.js}"></script>
 <script th:src="@{/js/bootstrap.bundle.js}"></script> <!-- 필요시 -->
@@ -257,5 +148,6 @@
 <script th:src="@{/js/breakpoints.min.js}"></script>
 <script th:src="@{/js/util.js}"></script>
 <script th:src="@{/js/main.js}"></script>
+<script th:src="@{/js/vacation-form.js}"></script>
 </body>
 </html>
