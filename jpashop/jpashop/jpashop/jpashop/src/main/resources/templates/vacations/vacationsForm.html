@@ -1,153 +1,239 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-  <title>휴가원작성</title>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-  <link rel="stylesheet" th:href="@{/css/fontawesome-all.min.css}" />
-  <link rel="stylesheet" th:href="@{/css/vacation-style.css}" />
-  <link rel="stylesheet" th:href="@{/css/main.css}" />
+    <title>휴가원작성</title>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/fontawesome-all.min.css}"/>
+    <link rel="stylesheet" th:href="@{/css/vacation-style.css}"/>
+    <link rel="stylesheet" th:href="@{/css/main.css}"/>
 </head>
 <body class="is-preload">
 
 <!-- Wrapper -->
 <div id="wrapper">
 
-  <!-- Main -->
-  <div id="main">
-    <div class="inner">
+    <!-- Main -->
+    <div id="main">
+        <div class="inner">
 
-      <!-- Header -->
-      <header id="header">
-        <a href="/index" class="logo"><strong>선한병원</strong></a>
-      </header>
+            <!-- Header -->
+            <header id="header">
+                <a href="/index" class="logo"><strong>선한병원</strong></a>
+            </header>
 
-      <!-- Section: 내가 신청한 리스트 -->
-      <section>
-        <header class="major">
-          <h2>휴가원 작성</h2>
-        </header>
+            <!-- Section: 휴가원 작성 -->
+            <section>
+                <header class="major">
+                    <h2>휴가원 작성</h2>
+                </header>
 
-        <div class="form-container">
-          <form th:action="@{/vacation/submit}" th:object="${vacationRequestForm}" method="post">
-            <h3 style="text-align: center;">결재 라인</h3>
-            <table class="approval-line">
-              <tr>
-                <th rowspan="2">결 재</th>
-                <th class="approval-role">대직자</th>
-                <th class="approval-role">부서장</th>
-                <th class="approval-role">인사담당</th>
-                <th class="approval-role">진료지원센터장</th>
-                <th class="approval-role">행정원장</th>
-                <th class="approval-role">대표원장</th>
-              </tr>
-              <tr>
-                <td class="approval-cell">
-                  <select th:field="*{substituteId}" class="form-control" required>
-                    <option th:each="member : ${substitutes}"
-                            th:value="${member.id}"
-                            th:text="${member.name}">
-                    </option>
-                  </select>
-                  <img id="sign1" class="signature-img" style="display:none;" />
-                </td>
-                <td class="approval-cell">
-                  <select th:field="*{deptLeaderId}" class="form-control" required>
-                    <option th:each="leader : ${deptLeaders}"
-                            th:value="${leader.id}"
-                            th:text="${leader.name}"></option>
-                  </select>
-                  <img id="sign2" class="signature-img" style="display:none;" />
-                </td>
-                <td class="approval-cell">
-                  <select onchange="setApprovalSign(this, 'sign3')">
-                    <option value="">선택</option>
-                    <option value="park">박부장</option>
-                    <option value="yoon">윤대리</option>
-                  </select>
-                  <img id="sign3" class="signature-img" style="display:none;" />
-                </td>
-                <td class="approval-cell">
-                  <select onchange="setApprovalSign(this, 'sign4')">
-                    <option value="">선택</option>
-                    <option value="ceo1">대표A</option>
-                    <option value="ceo2">대표B</option>
-                  </select>
-                  <img id="sign4" class="signature-img" style="display:none;" />
-                </td>
-              </tr>
-            </table>
+                <div class="form-container">
+                    <form th:action="@{/vacation/submit}" th:object="${vacationRequestForm}" method="post">
 
-            <div class="field"><label>이름</label><input type="text" name="name" th:value="${loginMember.name}" readonly></div>
-            <div class="field"><label>소속 부서</label><input type="text" name="deptCode" th:value="${deptName}" readonly></div>
-            <div class="field"><label>직위</label><input type="text" name="jobType" th:value="${jobTypeName}" readonly></div>
+                        <!-- 휴가원 제목과 결재라인 -->
+                        <div class="header-layout">
+                            <div class="approval-section">
+                                <h4>결재 라인</h4>
+                                <table class="approval-line">
+                                    <tr>
+                                        <th rowspan="2" class="approval-header">결재</th>
+                                        <th class="approval-role">대직자</th>
+                                        <th class="approval-role">부서장</th>
+                                        <th class="approval-role">인사담당</th>
+                                        <th class="approval-role approval-wide">진료지원센터장</th>
+                                        <th class="approval-role">행정원장</th>
+                                        <th class="approval-role">대표원장</th>
+                                    </tr>
+                                    <tr>
+                                        <td class="approval-cell">
+                                            <select th:field="*{substituteId}" class="form-control approval-select"
+                                                    required>
+                                                <option th:each="member : ${substitutes}"
+                                                        th:value="${member.id}"
+                                                        th:text="${member.name}">
+                                                </option>
+                                            </select>
+                                            <img id="sign1" class="signature-img"/>
+                                        </td>
+                                        <td class="approval-cell">
+                                            <select th:field="*{deptLeaderId}" class="form-control approval-select"
+                                                    required>
+                                                <option th:each="leader : ${deptLeaders}"
+                                                        th:value="${leader.id}"
+                                                        th:text="${leader.name}"></option>
+                                            </select>
+                                            <img id="sign2" class="signature-img"/>
+                                        </td>
+                                        <td class="approval-cell">
+                                            <select onchange="setApprovalSign(this, 'sign3')" class="approval-select">
+                                                <option value="">선택</option>
+                                                <option value="park">박부장</option>
+                                                <option value="yoon">윤대리</option>
+                                            </select>
+                                            <img id="sign3" class="signature-img"/>
+                                        </td>
+                                        <td class="approval-cell">
+                                            <select onchange="setApprovalSign(this, 'sign4')"
+                                                    class="approval-select approval-select-wide">
+                                                <option value="">선택</option>
+                                                <option value="ceo1">센터장A</option>
+                                                <option value="ceo2">센터장B</option>
+                                            </select>
+                                            <img id="sign4" class="signature-img"/>
+                                        </td>
+                                        <td class="approval-cell">
+                                            <select onchange="setApprovalSign(this, 'sign5')" class="approval-select">
+                                                <option value="">선택</option>
+                                                <option value="admin1">행정원장A</option>
+                                                <option value="admin2">행정원장B</option>
+                                            </select>
+                                            <img id="sign5" class="signature-img"/>
+                                        </td>
+                                        <td class="approval-cell">
+                                            <select onchange="setApprovalSign(this, 'sign6')" class="approval-select">
+                                                <option value="">선택</option>
+                                                <option value="ceo1">대표원장A</option>
+                                                <option value="ceo2">대표원장B</option>
+                                            </select>
+                                            <img id="sign6" class="signature-img"/>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
 
-            <div class="field"><label>휴가 종류</label>
-              <select name="type" required>
-                <option value="">선택</option>
-                <option value="연차">연차</option>
-                <option value="병가">병가</option>
-                <option value="특별휴가">특별휴가</option>
-                <option value="기타">기타</option>
-              </select>
-            </div>
-            <div class="field"><label>시작일</label><input type="date" name="startDate" required></div>
-            <div class="field"><label>종료일</label><input type="date" name="endDate" required></div>
-            <div class="field"><label>총 일수</label><input type="number" name="days" id="days" min="1" readonly /></div>
-            <div class="field"><label>사유</label><textarea name="reason" rows="4" placeholder="휴가 사유를 입력하세요" required></textarea></div>
-            <div class="field"><label>비상연락처</label><input type="tel" name="contact" placeholder="예: 010-1234-5678" required></div>
-            <div class="field"><label>제출일</label><input type="datetime-local" name="submitDate" id="submitDate" readonly /></div>
-            <div class="form-group">
-              <label>본인 서명</label><br>
-              <!-- 서명 미리보기 -->
-              <img id="signaturePreview" style="border:1px solid #000; max-height:100px; display:none;" />
-              <!-- 확인 버튼 -->
-              <button type="button" class="btn btn-secondary mt-2" onclick="showSignature()">서명 확인</button>
-              <!-- hidden 필드: 제출 시 서명값 포함 -->
-              <input type="hidden" name="signatureImage" id="signatureImage" />
-            </div>
-            <div class="actions">
-              <button type="submit" class="primary">제출</button>
-              <button type="reset">취소</button>
-            </div>
-          </form>
+                        <!-- 신청자 정보 테이블 -->
+                        <table class="applicant-table">
+                            <tr>
+                                <td rowspan="3" class="applicant-header">신청자</td>
+                                <td class="info-label">소 속</td>
+                                <td class="info-input">
+                                    <input type="text" name="deptCode" th:value="${deptName}" readonly
+                                           class="readonly-input">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="info-label">성 명</td>
+                                <td class="info-input">
+                                    <input type="text" name="name" th:value="${loginMember.name}" readonly
+                                           class="readonly-input">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="info-label">직 책</td>
+                                <td class="info-input">
+                                    <input type="text" name="jobType" th:value="${jobTypeName}" readonly
+                                           class="readonly-input">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="info-label">연락처</td>
+                                <td colspan="2" class="contact-info">
+                                    <span>집소:</span>
+                                    <input type="text" class="contact-input">
+                                    <span>전화번호:</span>
+                                    <input type="text" class="contact-input">
+                                </td>
+                            </tr>
+                        </table>
+
+                        <!-- 휴가 종류 및 기간 -->
+                        <table class="vacation-table">
+                            <tr>
+                                <td rowspan="2" class="vacation-header">휴가신청내역</td>
+                                <td class="vacation-types">
+                                    <select name="type" required class="vacation-select">
+                                        <option value="">휴가종류 선택</option>
+                                        <option value="연차휴가">연차휴가</option>
+                                        <option value="경조휴가">경조휴가</option>
+                                        <option value="특별휴가">특별휴가</option>
+                                        <option value="생리휴가">생리휴가</option>
+                                        <option value="공민휴가">공민휴가</option>
+                                        <option value="유급/산전휴가">유급/산전휴가</option>
+                                        <option value="병가">병가</option>
+                                        <option value="기타">기타</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="vacation-content">
+                                    <label class="content-label">휴가내용</label>
+                                    <input type="text" name="vacationContent" class="content-input">
+                                </td>
+                            </tr>
+                        </table>
+
+                        <!-- 기간 선택 -->
+                        <table class="period-table">
+                            <tr>
+                                <td class="period-header">기간</td>
+                                <td class="period-dates">
+                                    <div class="date-selection">
+                                        <input type="date" name="startDate" id="startDate" required> ~
+                                        <input type="date" name="endDate" id="endDate" required>
+                                    </div>
+                                    <div class="time-selection" id="timeSelection" style="display: none;">
+                                        <label class="time-option">
+                                            <input type="radio" name="timeType" value="종일" checked> 종일
+                                        </label>
+                                        <label class="time-option">
+                                            <input type="radio" name="timeType" value="오전"> 오전
+                                        </label>
+                                        <label class="time-option">
+                                            <input type="radio" name="timeType" value="오후"> 오후
+                                        </label>
+                                    </div>
+                                </td>
+                                <td class="total-days">
+                                    <strong>총 기간 : </strong>
+                                    <input type="number" name="days" id="days" min="0.5" step="0.5" readonly
+                                           class="days-input">
+                                    <strong>일</strong>
+                                </td>
+                            </tr>
+                        </table>
+
+                                                 <!-- 서명 및 제출 -->
+                         <div class="signature-section">
+                             <div class="signature-container">
+                                 <div class="signature-line">
+                                     <label><strong>본인 서명</strong></label>
+                                     <span class="signature-name" th:text="${loginMember.name}">사용자명</span>
+                                     <span class="signature-mark" id="signatureMark">(인)</span>
+                                     <button type="button" class="signature-btn" onclick="showSignature()">서명 확인</button>
+                                 </div>
+                                 <img id="signaturePreview" class="signature-preview" style="display:none;"/>
+                                 <input type="hidden" name="signatureImage" id="signatureImage"/>
+                                 <input type="hidden" name="submitDate" id="submitDate"/>
+                                 <!-- 서명 데이터를 JavaScript에서 사용하기 위한 hidden input -->
+                                 <input type="hidden" id="userSignatureData" th:value="${loginMember.signatureImage}"/>
+                                 <input type="hidden" id="userNameData" th:value="${loginMember.name}"/>
+                             </div>
+                         </div>
+
+                        <div class="actions">
+                            <button type="submit" class="primary">제출</button>
+                            <button type="reset">취소</button>
+                        </div>
+                    </form>
+                </div>
+            </section>
         </div>
-      </section>
-
-
     </div>
-  </div>
-  <!-- Sidebar -->
-  <div th:replace="~{fragments/sidebar :: #sidebar}" />
-  <!-- end idebar -->
+    <!-- Sidebar -->
+    <div th:replace="~{fragments/sidebar :: #sidebar}"/>
+    <!-- end sidebar -->
 </div>
-
-<!--제출일 자동 으로 저장-->
-<script>
-  document.addEventListener("DOMContentLoaded", function () {
-    const now = new Date();
-    const offset = now.getTimezoneOffset();
-    const localDate = new Date(now.getTime() - offset * 60 * 1000);
-    const formatted = localDate.toISOString().slice(0, 16); // yyyy-MM-ddTHH:mm
-
-    const submitDateField = document.getElementById("submitDate");
-    if (submitDateField) {
-      submitDateField.value = formatted;
-    }
-  });
-
-</script>
-
-<!--휴가 시작일 종료일 선택 자동 계산 해서 총 일수에 입력-->
-
 <!-- Scripts -->
 <script th:src="@{/js/jquery.min.js}"></script>
-<script th:src="@{/js/bootstrap.bundle.js}"></script> <!-- 필요시 -->
+<script th:src="@{/js/bootstrap.bundle.js}"></script>
 <script th:src="@{/js/browser.min.js}"></script>
 <script th:src="@{/js/breakpoints.min.js}"></script>
 <script th:src="@{/js/util.js}"></script>
 <script th:src="@{/js/main.js}"></script>
 <script th:src="@{/js/vacation-form.js}"></script>
+<script th:src="@{/js/logout-confirm.js}"></script>
 </body>
 </html>
