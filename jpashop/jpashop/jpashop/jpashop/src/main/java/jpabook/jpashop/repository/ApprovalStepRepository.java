@@ -23,6 +23,14 @@ public interface ApprovalStepRepository extends JpaRepository<ApprovalStep, Long
                    "ORDER BY vr.submitted_at DESC", nativeQuery = true)
     List<Object[]> findPendingApprovalsByApproverIdNative(@Param("approverId") String approverId);
 
+    // 휴가 신청 ID로 결재 단계들을 순서대로 조회 (Native Query - CLOB 제외)
+    @Query(value = "SELECT aps.approval_step_id, aps.vacation_request_id, aps.approver_id, " +
+                   "aps.step_order_num, aps.status, aps.approval_comment, aps.approved_at " +
+                   "FROM approval_step aps " +
+                   "WHERE aps.vacation_request_id = :requestId " +
+                   "ORDER BY aps.step_order_num", nativeQuery = true)
+    List<Object[]> findApprovalStepsByRequestIdNative(@Param("requestId") Long requestId);
+
     // 휴가 신청 ID로 결재 단계들을 순서대로 조회
     List<ApprovalStep> findByVacationRequestIdOrderByStepOrder(Long vacationRequestId);
 

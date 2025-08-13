@@ -60,4 +60,10 @@ public String logout(HttpSession session, RedirectAttributes redirectAttributes)
         return "home";
     }
 
+    // 인터셉터에서 리다이렉트할 로그인 페이지
+    @GetMapping("/login")
+    public String loginRedirect() {
+        return "redirect:/members/login";
+    }
+
 }
