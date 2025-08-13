@@ -1,0 +1,102 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>내 휴가 신청 목록</title>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/fontawesome-all.min.css}"/>
+    <link rel="stylesheet" th:href="@{/css/main.css}"/>
+    <link rel="stylesheet" th:href="@{/css/approval-style.css}"/>
+</head>
+<body class="is-preload">
+
+<!-- Wrapper -->
+<div id="wrapper">
+
+    <!-- Main -->
+    <div id="main">
+        <div class="inner">
+
+            <!-- Header -->
+            <header id="header">
+                <a href="/index" class="logo"><strong>선한병원</strong></a>
+            </header>
+
+            <!-- Section: 내 휴가 신청 목록 -->
+            <section>
+                <header class="major">
+                    <h2>내 휴가 신청 목록</h2>
+                </header>
+
+                <div class="table-wrapper">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>휴가 종류</th>
+                            <th>기간</th>
+                            <th>신청일</th>
+                            <th>상태</th>
+                            <th>결재 진행</th>
+                            <th>상세 내용</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="request : ${myRequests}">
+                            <td th:text="${request.vacationType}"></td>
+                            <td>
+                                <span th:text="${#temporals.format(request.startDate, 'yyyy-MM-dd')}"></span> ~
+                                <span th:text="${#temporals.format(request.endDate, 'yyyy-MM-dd')}"></span>
+                                (<span th:text="${request.totalDays}"></span>일)
+                            </td>
+                            <td th:text="${#temporals.format(request.submittedAt, 'yyyy-MM-dd HH:mm')}"></td>
+                            <td>
+                                <span class="status-badge status-draft" th:if="${request.status == 'DRAFT'}">임시저장</span>
+                                <span class="status-badge status-pending" th:if="${request.status == 'PENDING'}">대기중</span>
+                                <span class="status-badge status-approved" th:if="${request.status == 'APPROVED'}">승인됨</span>
+                                <span class="status-badge status-rejected" th:if="${request.status == 'REJECTED'}">반려됨</span>
+                                <span class="status-badge status-canceled" th:if="${request.status == 'CANCELED'}">취소됨</span>
+                            </td>
+                            <td>
+                                <div class="approval-progress">
+                                    <span th:each="step, iterStat : ${request.approvalSteps}" 
+                                          th:class="${step.status == 'APPROVED' ? 'step-approved' : 
+                                                    step.status == 'REJECTED' ? 'step-rejected' : 
+                                                    step.status == 'PENDING' ? 'step-pending' : 'step-waiting'}">
+                                        <span th:text="${step.stepOrder}"></span>
+                                    </span>
+                                </div>
+                            </td>
+                            <td>
+                                <a th:href="@{/approval/my-detail/{id}(id=${request.id})}" class="button small">상세보기</a>
+                            </td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(myRequests)}">
+                            <td colspan="6" style="text-align: center;">신청한 휴가가 없습니다.</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="actions">
+                    <a href="/vacation/form" class="button primary">새 휴가 신청</a>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- Sidebar -->
+    <div th:replace="~{fragments/sidebar :: #sidebar}"/>
+</div>
+
+<!-- Scripts -->
+<script th:src="@{/js/jquery.min.js}"></script>
+<script th:src="@{/js/bootstrap.bundle.js}"></script>
+<script th:src="@{/js/browser.min.js}"></script>
+<script th:src="@{/js/breakpoints.min.js}"></script>
+<script th:src="@{/js/util.js}"></script>
+<script th:src="@{/js/main.js}"></script>
+<script th:src="@{/js/logout-confirm.js}"></script>
+
+</body>
+</html>

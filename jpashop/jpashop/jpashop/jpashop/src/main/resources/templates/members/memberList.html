@@ -41,7 +41,6 @@
               <th>근무상태</th>
               <th>전화번호</th>
               <th>주소</th>
-              <th>우편번호</th>
               <th>서명</th>
             </tr>
             </thead>
@@ -80,8 +79,7 @@
               </td>
 
               <td th:text="${member.phone}"></td>
-              <td th:text="${member.address?.city}"></td>
-              <td th:text="${member.address?.zipcode}"></td>
+              <td th:text="${member.address?.address}"></td>
               <td>
                 <img class="signature-img"
                      th:if="${member.signatureImage}"

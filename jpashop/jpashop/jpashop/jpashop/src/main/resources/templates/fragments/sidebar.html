@@ -17,6 +17,8 @@
                 <li><a th:href="@{/index}">홈페이지</a></li>
                 <li><a th:href="@{/contract}">근로계약서</a></li>
                 <li><a th:href="@{/vacation/form}">휴가원</a></li>
+                <li><a th:href="@{/approval/my-requests}">내 휴가 신청</a></li>
+                <li><a th:href="@{/approval/pending}">결재 대기 목록</a></li>
                 <li th:if="${session.loginMember != null and session.loginMember.id == 'admin'}">
                     <a th:href="@{/members/memberList}">회원 목록</a>
                 </li>

@@ -35,7 +35,7 @@ public class Member {
     private Integer useFlag;    // Oracle useflag
 
     @Lob
-    @Column(columnDefinition = "TEXT")
+    @Column(columnDefinition = "CLOB")
     private String signatureImage;
 
 }

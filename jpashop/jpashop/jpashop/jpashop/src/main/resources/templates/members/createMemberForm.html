@@ -80,23 +80,13 @@
       <h3>주소 정보</h3>
 
       <div class="editorial-row">
-        <!-- 도시 -->
-        <div class="editorial-col-6">
+        <!-- 주소 -->
+        <div class="editorial-col-12">
           <div class="editorial-form-group">
-            <label class="editorial-label" th:for="city">도시</label>
-            <input type="text" th:field="*{city}" class="editorial-input" placeholder="도시를 입력하세요"
-            th:class="${#fields.hasErrors('city')} ? 'editorial-input editorial-field-error' : 'editorial-input'">
-            <span class="error-message" th:if="${#fields.hasErrors('city')}" th:errors="*{city}"></span>
-          </div>
-        </div>
-
-        <!-- 우편번호 -->
-        <div class="editorial-col-6">
-          <div class="editorial-form-group">
-            <label class="editorial-label" th:for="zipcode">도로명주소</label>
-            <input type="text" th:field="*{zipcode}" class="editorial-input" placeholder="우편번호를 입력하세요"
-                   th:class="${#fields.hasErrors('zipcode')} ? 'editorial-input editorial-field-error' : 'editorial-input'">
-            <span class="error-message" th:if="${#fields.hasErrors('zipcode')}" th:errors="*{zipcode}"></span>
+            <label class="editorial-label" th:for="address">주소</label>
+            <input type="text" th:field="*{address}" class="editorial-input" placeholder="전체 주소를 입력하세요 (예: 서울시 강남구 테헤란로 123)"
+            th:class="${#fields.hasErrors('address')} ? 'editorial-input editorial-field-error' : 'editorial-input'">
+            <span class="error-message" th:if="${#fields.hasErrors('address')}" th:errors="*{address}"></span>
           </div>
         </div>
       </div>

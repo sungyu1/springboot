@@ -37,11 +37,8 @@ public class MemberForm {
     @NotBlank(message = "전화번호는 필수입니다.")
     private String phone;
 
-    @NotBlank(message = "도시는 필수입니다.")
-    private String city;
-
-    @NotEmpty(message = "도로명은 필수입니다.")
-    private String zipcode;
+    @NotBlank(message = "주소는 필수입니다.")
+    private String address;
 
     private String signatureData;//싸인 이미지 저장
 

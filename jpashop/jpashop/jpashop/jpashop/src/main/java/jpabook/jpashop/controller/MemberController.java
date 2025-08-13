@@ -34,7 +34,7 @@ public class MemberController {
             return "members/createMemberForm";
         }
 
-        Address address = new Address(form.getCity(),form.getZipcode());
+        Address address = new Address(form.getAddress());
 
         Member member = new Member();
         member.setId(form.getId()); // Oracle userid 와 유사하게 이메일을 ID로 임시 사용

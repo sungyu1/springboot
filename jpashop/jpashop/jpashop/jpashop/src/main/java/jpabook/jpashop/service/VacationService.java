@@ -20,12 +20,13 @@ public class VacationService {
     private final VacationRepository vacationRepository;
     private final MemberRepository memberRepository;
     @Transactional
-    public void submitVacation(Member applicant, Member substitute, Member deptLeader, VacationRequestForm form) {
+    public void submitVacation(Member applicant, Member substitute, Member hrStaff, VacationRequestForm form) {
         VacationRequest request = new VacationRequest();
         request.setApplicant(applicant);
         request.setSubstitute(substitute);
         request.setStartDate(form.getStartDate());
         request.setEndDate(form.getEndDate());
+        request.setTotalDays(form.getDays());
         request.setReason(form.getReason());
         request.setStatus(VacationStatus.PENDING);
         request.setVacationType(form.getVacationType());
@@ -34,9 +35,16 @@ public class VacationService {
         // 회원가입 시 등록한 서명을 그대로 저장
         request.setSignatureImage(applicant.getSignatureImage());
 
+        // 부서장 자동 찾기
+        Member deptLeader = findDepartmentLeader(applicant);
+        if (deptLeader == null) {
+            throw new IllegalStateException("해당 부서의 부서장을 찾을 수 없습니다.");
+        }
+
         List<ApprovalStep> steps = List.of(
                 createStep(request, substitute, 1),
-                createStep(request, deptLeader, 2)
+                createStep(request, deptLeader, 2),
+                createStep(request, hrStaff, 3)
         );
         request.setApprovalSteps(steps);
 
@@ -53,8 +61,13 @@ public class VacationService {
     }
 
     private Member findDepartmentLeader(Member applicant) {
+        // 신청자의 부서 코드가 null인 경우 처리
+        if (applicant.getDeptCode() == null) {
+            throw new IllegalStateException("신청자의 부서 정보가 없습니다.");
+        }
+        
         return memberRepository.findAll().stream()
-                .filter(m -> m.getDeptCode().equals(applicant.getDeptCode()))
+                .filter(m -> m.getDeptCode() != null && m.getDeptCode().equals(applicant.getDeptCode()))
                 .filter(m -> m.getJobType() == 2) // 2: 부서장
                 .findFirst()
                 .orElse(null);
@@ -65,5 +78,15 @@ public class VacationService {
                 .filter(m -> m.getJobType() == 5) // 5: 센터장
                 .findFirst()
                 .orElse(null);
+    }
+
+    // 휴가 신청 조회
+    public VacationRequest getVacationRequest(Long requestId) {
+        return vacationRepository.findById(requestId).orElse(null);
+    }
+
+    // 내가 신청한 휴가 목록 조회
+    public List<VacationRequest> getMyVacationRequests(String applicantId) {
+        return vacationRepository.findByApplicantIdOrderBySubmittedAtDesc(applicantId);
     }
 }

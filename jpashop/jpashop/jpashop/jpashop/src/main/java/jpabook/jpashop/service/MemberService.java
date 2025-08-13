@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -120,7 +121,7 @@ public class MemberService {
             newMember.setName(oracleUser.getName());
             // 동기화 시에도 해시 저장
             newMember.setPassword(passwordEncoder.encode(rawPassword));
-            newMember.setAddress(new Address("oracleCity", "oracleStreet"));
+            newMember.setAddress(new Address("Oracle 서버 주소"));
             newMember.setSignatureImage(null);
             return memberRepository.save(newMember);
         }
@@ -128,9 +129,23 @@ public class MemberService {
     }
 
     public List<Member> findByDeptAndJob(String deptCode, int jobType) {
+        // deptCode가 null인 경우 빈 리스트 반환
+        if (deptCode == null) {
+            return new ArrayList<>();
+        }
+        
         return memberRepository.findAll().stream()
-                .filter(m -> deptCode.equals(m.getDeptCode()))
+                .filter(m -> m.getDeptCode() != null && deptCode.equals(m.getDeptCode()))
                 .filter(m -> m.getJobType() != null && m.getJobType() == jobType)
+                .toList();
+    }
+
+    // 인사담당자 조회 (DEPT_CODE='ms', JOB_TYPE=4, USE_FLAG=1)
+    public List<Member> findHrStaff() {
+        return memberRepository.findAll().stream()
+                .filter(m -> "ms".equals(m.getDeptCode()))
+                .filter(m -> m.getJobType() != null && m.getJobType() == 4)
+                .filter(m -> m.getUseFlag() != null && m.getUseFlag() == 1)
                 .toList();
     }
 

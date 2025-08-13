@@ -3,6 +3,7 @@ package jpabook.jpashop.controller;
 import jakarta.servlet.http.HttpSession;
 import jpabook.jpashop.domain.Member;
 import jpabook.jpashop.domain.VacationRequest;
+import jpabook.jpashop.domain.VacationType;
 import jpabook.jpashop.service.MemberService;
 import jpabook.jpashop.service.VacationService;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +23,7 @@ public class VacationController {
     private final VacationService vacationService;
     private final MemberService memberService;
     private void setLocalizedMemberInfo(Member loginMember, Model model) {
-        String deptName = switch (loginMember.getDeptCode()) {
+        String deptName = switch (loginMember.getDeptCode() != null ? loginMember.getDeptCode() : "") {
             case "im" -> "내과";
             case "gs" -> "외과";
             case "ns" -> "신경외과";
@@ -62,14 +63,20 @@ public class VacationController {
         Member loginMember = (Member) session.getAttribute("loginMember");
         if (loginMember == null) return "redirect:/members/login";
 
+        // 부서 정보가 없는 경우 처리
+        if (loginMember.getDeptCode() == null) {
+            model.addAttribute("error", "부서 정보가 없습니다. 관리자에게 문의하세요.");
+            return "error/error";
+        }
 
         List<Member> substitutes = memberService.findByDeptAndJob(loginMember.getDeptCode(), loginMember.getJobType());
-        List<Member> deptLeaders = memberService.findByDeptAndJob(loginMember.getDeptCode(), 2); // jobType 2 = 부서장
+        List<Member> hrStaff = memberService.findHrStaff(); // 인사담당자 목록
 
         model.addAttribute("vacationRequestForm", new VacationRequestForm());
         model.addAttribute("substitutes", substitutes);
-        model.addAttribute("deptLeaders", deptLeaders);
+        model.addAttribute("hrStaff", hrStaff);
         model.addAttribute("loginMember", loginMember);
+        model.addAttribute("vacationTypes", VacationType.values());
         setLocalizedMemberInfo(loginMember, model);
         return "vacations/vacationsForm";
     }
@@ -78,11 +85,27 @@ public class VacationController {
     public String submitVacation(@ModelAttribute VacationRequestForm form,
                                  HttpSession session) {
         Member applicant = (Member) session.getAttribute("loginMember");
+        
+        // 부서 정보가 없는 경우 처리
+        if (applicant.getDeptCode() == null) {
+            return "redirect:/vacation/form?error=dept";
+        }
+        
         Member substitute = memberService.findOne(form.getSubstituteId());
-        Member deptLeader = memberService.findOne(form.getDeptLeaderId());
+        Member hrStaff = memberService.findOne(form.getHrStaffId());
 
-        vacationService.submitVacation(applicant, substitute, deptLeader, form);
-        return "redirect:/vacation/list";
+        // 인사담당자가 선택되지 않은 경우
+        if (hrStaff == null) {
+            return "redirect:/vacation/form?error=hr";
+        }
+
+        try {
+            vacationService.submitVacation(applicant, substitute, hrStaff, form);
+            return "redirect:/approval/my-requests";
+        } catch (IllegalStateException e) {
+            // 부서장을 찾을 수 없는 경우
+            return "redirect:/vacation/form?error=leader";
+        }
     }
 
 }

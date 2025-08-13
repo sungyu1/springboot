@@ -8,6 +8,7 @@
     <link rel="stylesheet" th:href="@{/css/fontawesome-all.min.css}"/>
     <link rel="stylesheet" th:href="@{/css/vacation-style.css}"/>
     <link rel="stylesheet" th:href="@{/css/main.css}"/>
+    <link rel="stylesheet" th:href="@{/css/approval-style.css}"/>
 </head>
 <body class="is-preload">
 
@@ -23,11 +24,24 @@
                 <a href="/index" class="logo"><strong>선한병원</strong></a>
             </header>
 
-            <!-- Section: 휴가원 작성 -->
-            <section>
-                <header class="major">
-                    <h2>휴가원 작성</h2>
-                </header>
+                         <!-- Section: 휴가원 작성 -->
+             <section>
+                 <header class="major">
+                     <h2>휴가원 작성</h2>
+                 </header>
+                 
+                                   <!-- 에러 메시지 표시 -->
+                  <div th:if="${param.error}" class="error-message">
+                      <div th:if="${param.error == 'dept'}" class="alert alert-danger">
+                          부서 정보가 없습니다. 관리자에게 문의하세요.
+                      </div>
+                      <div th:if="${param.error == 'leader'}" class="alert alert-danger">
+                          해당 부서의 부서장을 찾을 수 없습니다. 관리자에게 문의하세요.
+                      </div>
+                      <div th:if="${param.error == 'hr'}" class="alert alert-danger">
+                          인사담당자를 선택해주세요.
+                      </div>
+                  </div>
 
                 <div class="form-container">
                     <form th:action="@{/vacation/submit}" th:object="${vacationRequestForm}" method="post">
@@ -57,23 +71,21 @@
                                             </select>
                                             <img id="sign1" class="signature-img"/>
                                         </td>
-                                        <td class="approval-cell">
-                                            <select th:field="*{deptLeaderId}" class="form-control approval-select"
-                                                    required>
-                                                <option th:each="leader : ${deptLeaders}"
-                                                        th:value="${leader.id}"
-                                                        th:text="${leader.name}"></option>
-                                            </select>
-                                            <img id="sign2" class="signature-img"/>
-                                        </td>
-                                        <td class="approval-cell">
-                                            <select onchange="setApprovalSign(this, 'sign3')" class="approval-select">
-                                                <option value="">선택</option>
-                                                <option value="park">박부장</option>
-                                                <option value="yoon">윤대리</option>
-                                            </select>
-                                            <img id="sign3" class="signature-img"/>
-                                        </td>
+                                                                                 <td class="approval-cell">
+                                             <span class="auto-approver">자동 설정</span>
+                                             <img id="sign2" class="signature-img"/>
+                                         </td>
+                                                                                 <td class="approval-cell">
+                                             <select th:field="*{hrStaffId}" class="form-control approval-select"
+                                                     onchange="setApprovalSign(this, 'sign3')" required>
+                                                 <option value="">선택</option>
+                                                 <option th:each="hr : ${hrStaff}"
+                                                         th:value="${hr.id}"
+                                                         th:text="${hr.name}">
+                                                 </option>
+                                             </select>
+                                             <img id="sign3" class="signature-img"/>
+                                         </td>
                                         <td class="approval-cell">
                                             <select onchange="setApprovalSign(this, 'sign4')"
                                                     class="approval-select approval-select-wide">
@@ -132,9 +144,9 @@
                                 <td class="info-label">연락처</td>
                                 <td colspan="2" class="contact-info">
                                     <span>집소:</span>
-                                    <input type="text" class="contact-input">
+                                    <input type="text" class="contact-input" th:value="${loginMember.address?.address}" readonly>
                                     <span>전화번호:</span>
-                                    <input type="text" class="contact-input">
+                                    <input type="text" class="contact-input" th:value="${loginMember.phone}" readonly>
                                 </td>
                             </tr>
                         </table>
@@ -143,26 +155,22 @@
                         <table class="vacation-table">
                             <tr>
                                 <td rowspan="2" class="vacation-header">휴가신청내역</td>
-                                <td class="vacation-types">
-                                    <select name="type" required class="vacation-select">
-                                        <option value="">휴가종류 선택</option>
-                                        <option value="연차휴가">연차휴가</option>
-                                        <option value="경조휴가">경조휴가</option>
-                                        <option value="특별휴가">특별휴가</option>
-                                        <option value="생리휴가">생리휴가</option>
-                                        <option value="공민휴가">공민휴가</option>
-                                        <option value="유급/산전휴가">유급/산전휴가</option>
-                                        <option value="병가">병가</option>
-                                        <option value="기타">기타</option>
-                                    </select>
-                                </td>
+                                                                 <td class="vacation-types">
+                                                                           <select th:field="*{vacationType}" required class="vacation-select">
+                                          <option value="">휴가종류 선택</option>
+                                          <option th:each="type : ${vacationTypes}"
+                                                  th:value="${type}"
+                                                  th:text="${type.displayName}">
+                                          </option>
+                                      </select>
+                                 </td>
                             </tr>
-                            <tr>
-                                <td class="vacation-content">
-                                    <label class="content-label">휴가내용</label>
-                                    <input type="text" name="vacationContent" class="content-input">
-                                </td>
-                            </tr>
+                                                         <tr>
+                                 <td class="vacation-content">
+                                     <label class="content-label">휴가내용</label>
+                                     <input type="text" th:field="*{reason}" class="content-input">
+                                 </td>
+                             </tr>
                         </table>
 
                         <!-- 기간 선택 -->
@@ -195,23 +203,23 @@
                             </tr>
                         </table>
 
-                                                 <!-- 서명 및 제출 -->
-                         <div class="signature-section">
-                             <div class="signature-container">
-                                 <div class="signature-line">
-                                     <label><strong>본인 서명</strong></label>
-                                     <span class="signature-name" th:text="${loginMember.name}">사용자명</span>
-                                     <span class="signature-mark" id="signatureMark">(인)</span>
-                                     <button type="button" class="signature-btn" onclick="showSignature()">서명 확인</button>
-                                 </div>
-                                 <img id="signaturePreview" class="signature-preview" style="display:none;"/>
-                                 <input type="hidden" name="signatureImage" id="signatureImage"/>
-                                 <input type="hidden" name="submitDate" id="submitDate"/>
-                                 <!-- 서명 데이터를 JavaScript에서 사용하기 위한 hidden input -->
-                                 <input type="hidden" id="userSignatureData" th:value="${loginMember.signatureImage}"/>
-                                 <input type="hidden" id="userNameData" th:value="${loginMember.name}"/>
-                             </div>
-                         </div>
+                        <!-- 서명 및 제출 -->
+                        <div class="signature-section">
+                            <div class="signature-container">
+                                <div class="signature-line">
+                                    <label><strong>본인 서명</strong></label>
+                                    <span class="signature-name" th:text="${loginMember.name}">사용자명</span>
+                                    <span class="signature-mark" id="signatureMark">(인)</span>
+                                    <button type="button" class="signature-btn" onclick="showSignature()">서명 확인</button>
+                                </div>
+                                <img id="signaturePreview" class="signature-preview" style="display:none;"/>
+                                <input type="hidden" name="signatureImage" id="signatureImage"/>
+                                <input type="hidden" name="submitDate" id="submitDate"/>
+                                <!-- 서명 데이터를 JavaScript에서 사용하기 위한 hidden input -->
+                                <input type="hidden" id="userSignatureData" th:value="${loginMember.signatureImage}"/>
+                                <input type="hidden" id="userNameData" th:value="${loginMember.name}"/>
+                            </div>
+                        </div>
 
                         <div class="actions">
                             <button type="submit" class="primary">제출</button>

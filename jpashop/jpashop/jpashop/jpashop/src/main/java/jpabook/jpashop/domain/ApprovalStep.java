@@ -13,7 +13,8 @@ import java.time.LocalDateTime;
 public class ApprovalStep {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "approval_step_seq")
+    @SequenceGenerator(name = "approval_step_seq", sequenceName = "approval_step_seq", allocationSize = 1)
     @Column(name = "approval_step_id")
     private Long id;
 
@@ -25,14 +26,14 @@ public class ApprovalStep {
     @JoinColumn(name = "approver_id")
     private Member approver;
 
-    @Column(name = "step_order")
+    @Column(name = "step_order_num")
     private Integer stepOrder; // 1: 대체자, 2: 팀장, 3: 센터장
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
     private ApprovalStatus status;
 
-    @Column(name = "comment")
+    @Column(name = "approval_comment")
     private String comment;
 
     @Column(name = "approved_at")

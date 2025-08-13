@@ -7,17 +7,14 @@ import lombok.Getter;
 @Getter
 public class Address {
 
-    private String city;
-    private String zipcode;
+    private String address; // 전체 주소를 한 번에 저장
 
     protected Address(){
 
     }
 
-    public Address(String city,String zipcode){
-        this.city=city;
-        this.zipcode=zipcode;
-
+    public Address(String address){
+        this.address = address;
     }
 
 }
