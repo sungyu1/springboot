@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>결재 상세 보기</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/css/approval-style.css}">
+</head>
+<body>
+    <div class="container mt-4">
+        <h2 class="mb-4">결재 상세 보기</h2>
+        
+        <div th:if="${request != null}">
+            <!-- 휴가 신청 정보 -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5>휴가 신청 정보</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong>신청자:</strong> <span th:text="${request.applicant.name}"></span></p>
+                            <p><strong>대체근무자:</strong> <span th:text="${request.substitute.name}"></span></p>
+                            <p><strong>휴가 종류:</strong> <span th:text="${request.vacationType.displayName}"></span></p>
+                            <p><strong>기간:</strong> <span th:text="${#temporals.format(request.startDate, 'yyyy-MM-dd')} + ' ~ ' + ${#temporals.format(request.endDate, 'yyyy-MM-dd')} + ' (' + ${request.totalDays} + '일)'"></span></p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>신청일:</strong> <span th:text="${#temporals.format(request.submittedAt, 'yyyy-MM-dd HH:mm')}"></span></p>
+                            <p><strong>사유:</strong> <span th:text="${request.reason}"></span></p>
+                            <p><strong>상태:</strong> 
+                                <span class="status-badge status-pending" th:if="${request.status == 'PENDING'}">대기중</span>
+                                <span class="status-badge status-approved" th:if="${request.status == 'APPROVED'}">승인됨</span>
+                                <span class="status-badge status-rejected" th:if="${request.status == 'REJECTED'}">반려됨</span>
+                                <span class="status-badge status-canceled" th:if="${request.status == 'CANCELED'}">취소됨</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 결재선 -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5>결재선</h5>
+                </div>
+                <div class="card-body">
+                    <div class="approval-line">
+                        <div th:each="step, iterStat : ${request.approvalSteps}" class="approval-step">
+                            <div class="step-number" th:text="${step.stepOrder}"></div>
+                            <div class="step-info">
+                                <div class="approver-name" th:text="${step.approver.name}"></div>
+                                <div class="step-status">
+                                    <span class="status-badge status-pending" th:if="${step.status == 'PENDING'}">대기중</span>
+                                    <span class="status-badge status-approved" th:if="${step.status == 'APPROVED'}">승인</span>
+                                    <span class="status-badge status-rejected" th:if="${step.status == 'REJECTED'}">반려</span>
+                                </div>
+                                <div th:if="${step.comment != null and step.comment != ''}" class="step-comment" th:text="${'사유: ' + step.comment}"></div>
+                                <div th:if="${step.approvedAt != null}" class="step-date" th:text="${#temporals.format(step.approvedAt, 'yyyy-MM-dd HH:mm')}"></div>
+                            </div>
+                            <div th:if="${!iterStat.last}" class="step-arrow">→</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 신청자 서명 -->
+            <div class="card mb-4" th:if="${request.signatureImage != null and request.signatureImage != ''}">
+                <div class="card-header">
+                    <h5>신청자 서명</h5>
+                </div>
+                <div class="card-body">
+                    <img th:src="${request.signatureImage}" alt="서명" class="signature-image">
+                </div>
+            </div>
+            
+            <!-- 전체 상태 표시 (승인/반려/취소된 경우) -->
+            <div th:if="${request.status != 'PENDING'}" class="alert alert-info">
+                <strong>전체 상태:</strong>
+                <span class="status-badge status-approved" th:if="${request.status == 'APPROVED'}">승인됨</span>
+                <span class="status-badge status-rejected" th:if="${request.status == 'REJECTED'}">반려됨</span>
+                <span class="status-badge status-canceled" th:if="${request.status == 'CANCELED'}">취소됨</span>
+                <span th:if="${request.finalApprovedAt != null}" th:text="${' (최종 처리일: ' + #temporals.format(request.finalApprovedAt, 'yyyy-MM-dd HH:mm') + ')'}"></span>
+            </div>
+            
+            <!-- 결재 처리 폼 (대기중인 경우만) -->
+            <div th:if="${request.status == 'PENDING' and currentApproverId != null}" class="card">
+                <div class="card-header">
+                    <h5>결재 처리</h5>
+                </div>
+                <div class="card-body">
+                    <form th:action="@{/approval/process/{id}(id=${request.id})}" method="post">
+                        <div class="mb-3">
+                            <label for="comment" class="form-label">결재 사유 (선택사항)</label>
+                            <textarea class="form-control" id="comment" name="comment" rows="3"></textarea>
+                        </div>
+                        <div class="d-flex gap-2">
+                            <button type="submit" name="action" value="approve" class="btn btn-success">승인</button>
+                            <button type="submit" name="action" value="reject" class="btn btn-danger">반려</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <div class="mt-3">
+            <a href="/approval/pending" class="btn btn-secondary">결재 대기 목록으로</a>
+            <a href="/" class="btn btn-secondary">홈으로</a>
+        </div>
+    </div>
+    
+    <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+</body>
+</html>

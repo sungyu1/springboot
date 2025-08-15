@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="x-ua-compatible" content="IE=edge"/>
+<title>Test results - OrderServiceTest</title>
+<link href="../css/base-style.css" rel="stylesheet" type="text/css"/>
+<link href="../css/style.css" rel="stylesheet" type="text/css"/>
+<script src="../js/report.js" type="text/javascript"></script>
+</head>
+<body>
+<div id="content">
+<h1>OrderServiceTest</h1>
+<div class="breadcrumbs">
+<a href="../index.html">all</a> &gt; 
+<a href="../packages/jpabook.jpashop.service.html">jpabook.jpashop.service</a> &gt; OrderServiceTest</div>
+<div id="summary">
+<table>
+<tr>
+<td>
+<div class="summaryGroup">
+<table>
+<tr>
+<td>
+<div class="infoBox" id="tests">
+<div class="counter">3</div>
+<p>tests</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="failures">
+<div class="counter">0</div>
+<p>failures</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="ignored">
+<div class="counter">0</div>
+<p>ignored</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="duration">
+<div class="counter">0.753s</div>
+<p>duration</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</td>
+<td>
+<div class="infoBox success" id="successRate">
+<div class="percent">100%</div>
+<p>successful</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="tab-container">
+<ul class="tabLinks">
+<li>
+<a href="#">Tests</a>
+</li>
+<li>
+<a href="#">Standard output</a>
+</li>
+</ul>
+<div class="tab">
+<h2>Tests</h2>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>Duration</th>
+<th>Result</th>
+</tr>
+</thead>
+<tr>
+<td class="success">상품주문()</td>
+<td class="success">0.013s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">상품주문_재고수량초과()</td>
+<td class="success">0.734s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">주문취소()</td>
+<td class="success">0.006s</td>
+<td class="success">passed</td>
+</tr>
+</table>
+</div>
+<div class="tab">
+<h2>Standard output</h2>
+<span class="code">
+<pre>16:09:00.376 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [jpabook.jpashop.service.OrderServiceTest]: OrderServiceTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+16:09:00.605 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration jpabook.jpashop.JpashopApplication for test class jpabook.jpashop.service.OrderServiceTest
+16:09:00.863 [Test worker] INFO org.springframework.boot.devtools.restart.RestartApplicationListener -- Restart disabled due to context in which it is running
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.5.3)
+
+2025-07-29T16:09:01.283+09:00  INFO 21464 --- [    Test worker] j.jpashop.service.OrderServiceTest       : Starting OrderServiceTest using Java 17.0.13 with PID 21464 (started by user in C:\Users\user\Desktop\Spring\jpashop\jpashop)
+2025-07-29T16:09:01.285+09:00  INFO 21464 --- [    Test worker] j.jpashop.service.OrderServiceTest       : No active profile set, falling back to 1 default profile: &quot;default&quot;
+2025-07-29T16:09:02.194+09:00  INFO 21464 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-07-29T16:09:02.241+09:00  INFO 21464 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 30 ms. Found 0 JPA repository interfaces.
+2025-07-29T16:09:02.881+09:00  INFO 21464 --- [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-07-29T16:09:03.127+09:00  INFO 21464 --- [    Test worker] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:f0fa1687-28fa-4a01-9d95-e7d2b5704872 user=SA
+2025-07-29T16:09:03.129+09:00  INFO 21464 --- [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-07-29T16:09:03.175+09:00  INFO 21464 --- [    Test worker] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-07-29T16:09:03.263+09:00  INFO 21464 --- [    Test worker] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.18.Final
+2025-07-29T16:09:03.328+09:00  INFO 21464 --- [    Test worker] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-07-29T16:09:03.713+09:00  INFO 21464 --- [    Test worker] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-07-29T16:09:03.804+09:00  INFO 21464 --- [    Test worker] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 2.3.232
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-07-29T16:09:04.760+09:00 DEBUG 21464 --- [    Test worker] org.hibernate.SQL                        : create global temporary table HTE_category(rn_ integer not null, category_id bigint, parent_id bigint, name varchar(255), primary key (rn_)) TRANSACTIONAL
+2025-07-29T16:09:04.768+09:00 DEBUG 21464 --- [    Test worker] org.hibernate.SQL                        : create global temporary table HTE_item(price integer, rn_ integer not null, stock_quantity integer, item_id bigint, dtype varchar(31) not null, actor varchar(255), artist varchar(255), author varchar(255), director varchar(255), etc varchar(255), isbn varchar(255), name varchar(255), primary key (rn_)) TRANSACTIONAL
+2025-07-29T16:09:04.769+09:00 DEBUG 21464 --- [    Test worker] org.hibernate.SQL                        : create global temporary table HTE_item2(price integer, rn_ integer not null, stock_quantity integer, item_id bigint, dtype varchar(31) not null, actor varchar(255), director varchar(255), name varchar(255), primary key (rn_)) TRANSACTIONAL
+2025-07-29T16:09:04.770+09:00 DEBUG 21464 --- [    Test worker] org.hibernate.SQL                        : create global temporary table HTE_item1(price integer, rn_ integer not null, stock_quantity integer, item_id bigint, dtype varchar(31) not null, author varchar(255), isbn varchar(255), name varchar(255), primary key (rn_)) TRANSACTIONAL
+2025-07-29T16:09:04.771+09:00 DEBUG 21464 --- [    Test worker] org.hibernate.SQL                        : create global temporary table HTE_order_item(count integer, order_price integer, rn_ integer not null, item_id bigint, order_id bigint, order_item_id bigint, primary key (rn_)) TRANSACTIONAL
+2025-07-29T16:09:04.773+09:00 DEBUG 21464 --- [    Test worker] org.hibernate.SQL                        : create global temporary table HTE_orders(rn_ integer not null, delivery_id bigint, member_id bigint, order_date timestamp(6), order_id bigint, status enum ('CANCEL','ORDER'), primary key (rn_)) TRANSACTIONAL
+2025-07-29T16:09:04.774+09:00 DEBUG 21464 --- [    Test worker] org.hibernate.SQL                        : create global temporary table HTE_users(rn_ integer not null, department_id bigint, id bigint, substitute_id bigint, email varchar(255), employee_no varchar(255), name varchar(255), position varchar(255), role enum ('CENTER_HEAD','EMPLOYEE','MANAGER'), primary key (rn_)) TRANSACTIONAL
+2025-07-29T16:09:04.775+09:00 DEBUG 21464 --- [    Test worker] org.hibernate.SQL                        : create global temporary table HTE_item0(price integer, rn_ integer not null, stock_quantity integer, item_id bigint, dtype varchar(31) not null, artist varchar(255), etc varchar(255), name varchar(255), primary key (rn_)) TRANSACTIONAL
+2025-07-29T16:09:04.776+09:00 DEBUG 21464 --- [    Test worker] org.hibernate.SQL                        : create global temporary table HTE_department(rn_ integer not null, id bigint, name varchar(255), primary key (rn_)) TRANSACTIONAL
+2025-07-29T16:09:04.777+09:00 DEBUG 21464 --- [    Test worker] org.hibernate.SQL                        : create global temporary table HTE_delivery(rn_ integer not null, deliver_id bigint, city varchar(255), street varchar(255), zipcode varchar(255), status enum ('COMP','READY'), primary key (rn_)) TRANSACTIONAL
+2025-07-29T16:09:04.778+09:00 DEBUG 21464 --- [    Test worker] org.hibernate.SQL                        : create global temporary table HTE_member(rn_ integer not null, member_id bigint, city varchar(255), email varchar(255), name varchar(255), password varchar(255), street varchar(255), zipcode varchar(255), primary key (rn_)) TRANSACTIONAL
+2025-07-29T16:09:04.955+09:00  INFO 21464 --- [    Test worker] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-07-29T16:09:04.969+09:00 DEBUG 21464 --- [    Test worker] org.hibernate.SQL                        : drop table if exists approval_step cascade 
+2025-07-29T16:09:04.970+09:00 DEBUG 21464 --- [    Test worker] org.hibernate.SQL                        : drop table if exists category cascade 
+2025-07-29T16:09:04.970+09:00 DEBUG 21464 --- [    Test worker] org.hibernate.SQL                        : drop table if exists category_item cascade 
+2025-07-29T16:09:04.970+09:00 DEBUG 21464 --- [    Test worker] org.hibernate.SQL                        : drop table if exists delivery cascade 
+2025-07-29T16:09:04.970+09:00 DEBUG 21464 --- [    Test worker] org.hibernate.SQL                        : drop table if exists department cascade 
+2025-07-29T16:09:04.970+09:00 DEBUG 21464 --- [    Test worker] org.hibernate.SQL                        : drop table if exists item cascade 
+2025-07-29T16:09:04.972+09:00 DEBUG 21464 --- [    Test worker] org.hibernate.SQL                        : drop table if exists member cascade 
+2025-07-29T16:09:04.972+09:00 DEBUG 21464 --- [    Test worker] org.hibernate.SQL                        : drop table if exists order_item cascade 
+2025-07-29T16:09:04.972+09:00 DEBUG 21464 --- [    Test worker] org.hibernate.SQL                        : drop table if exists orders cascade 
+2025-07-29T16:09:04.972+09:00 DEBUG 21464 --- [    Test worker] org.hibernate.SQL                        : drop table if exists users cascade 
+2025-07-29T16:09:04.973+09:00 DEBUG 21464 --- [    Test worker] org.hibernate.SQL                        : drop table if exists vacation_request cascade 
+2025-07-29T16:09:04.973+09:00 DEBUG 21464 --- [    Test worker] org.hibernate.SQL                        : drop sequence if exists category_seq
+2025-07-29T16:09:04.973+09:00 DEBUG 21464 --- [    Test worker] org.hibernate.SQL                        : drop sequence if exists delivery_seq
+2025-07-29T16:09:04.974+09:00 DEBUG 21464 --- [    Test worker] org.hibernate.SQL                        : drop sequence if exists department_seq
+2025-07-29T16:09:04.974+09:00 DEBUG 21464 --- [    Test worker] org.hibernate.SQL                        : drop sequence if exists item_seq
+2025-07-29T16:09:04.974+09:00 DEBUG 21464 --- [    Test worker] org.hibernate.SQL                        : drop sequence if exists member_seq
+2025-07-29T16:09:04.974+09:00 DEBUG 21464 --- [    Test worker] org.hibernate.SQL                        : drop sequence if exists order_item_seq
+2025-07-29T16:09:04.974+09:00 DEBUG 21464 --- [    Test worker] org.hibernate.SQL                        : drop sequence if exists orders_seq
+2025-07-29T16:09:04.974+09:00 DEBUG 21464 --- [    Test worker] org.hibernate.SQL                        : drop sequence if exists users_seq
+2025-07-29T16:09:04.979+09:00 DEBUG 21464 --- [    Test worker] org.hibernate.SQL                        : create sequence category_seq start with 1 increment by 50
+2025-07-29T16:09:04.980+09:00 DEBUG 21464 --- [    Test worker] org.hibernate.SQL                        : create sequence delivery_seq start with 1 increment by 50
+2025-07-29T16:09:04.981+09:00 DEBUG 21464 --- [    Test worker] org.hibernate.SQL                        : create sequence department_seq start with 1 increment by 50
+2025-07-29T16:09:04.981+09:00 DEBUG 21464 --- [    Test worker] org.hibernate.SQL                        : create sequence item_seq start with 1 increment by 50
+2025-07-29T16:09:04.981+09:00 DEBUG 21464 --- [    Test worker] org.hibernate.SQL                        : create sequence member_seq start with 1 increment by 50
+2025-07-29T16:09:04.981+09:00 DEBUG 21464 --- [    Test worker] org.hibernate.SQL                        : create sequence order_item_seq start with 1 increment by 50
+2025-07-29T16:09:04.982+09:00 DEBUG 21464 --- [    Test worker] org.hibernate.SQL                        : create sequence orders_seq start with 1 increment by 50
+2025-07-29T16:09:04.982+09:00 DEBUG 21464 --- [    Test worker] org.hibernate.SQL                        : create sequence users_seq start with 1 increment by 50
+2025-07-29T16:09:04.987+09:00 DEBUG 21464 --- [    Test worker] org.hibernate.SQL                        : create table approval_step (step_order integer, approval_step_id bigint generated by default as identity, approved_at timestamp(6), approver_id bigint, vacation_request_id bigint, comment varchar(255), status enum ('APPROVED','PENDING','REJECTED') not null, primary key (approval_step_id))
+2025-07-29T16:09:04.995+09:00 DEBUG 21464 --- [    Test worker] org.hibernate.SQL                        : create table category (category_id bigint not null, parent_id bigint, name varchar(255), primary key (category_id))
+2025-07-29T16:09:04.996+09:00 DEBUG 21464 --- [    Test worker] org.hibernate.SQL                        : create table category_item (category_id bigint not null, item_id bigint not null)
+2025-07-29T16:09:04.997+09:00 DEBUG 21464 --- [    Test worker] org.hibernate.SQL                        : create table delivery (deliver_id bigint not null, city varchar(255), street varchar(255), zipcode varchar(255), status enum ('COMP','READY'), primary key (deliver_id))
+2025-07-29T16:09:04.998+09:00 DEBUG 21464 --- [    Test worker] org.hibernate.SQL                        : create table department (id bigint not null, name varchar(255), primary key (id))
+2025-07-29T16:09:05.001+09:00 DEBUG 21464 --- [    Test worker] org.hibernate.SQL                        : create table item (price integer not null, stock_quantity integer not null, item_id bigint not null, dtype varchar(31) not null, actor varchar(255), artist varchar(255), author varchar(255), director varchar(255), etc varchar(255), isbn varchar(255), name varchar(255), primary key (item_id))
+2025-07-29T16:09:05.003+09:00 DEBUG 21464 --- [    Test worker] org.hibernate.SQL                        : create table member (member_id bigint not null, city varchar(255), email varchar(255), name varchar(255), password varchar(255) not null, street varchar(255), zipcode varchar(255), primary key (member_id))
+2025-07-29T16:09:05.005+09:00 DEBUG 21464 --- [    Test worker] org.hibernate.SQL                        : create table order_item (count integer not null, order_price integer not null, item_id bigint, order_id bigint, order_item_id bigint not null, primary key (order_item_id))
+2025-07-29T16:09:05.007+09:00 DEBUG 21464 --- [    Test worker] org.hibernate.SQL                        : create table orders (delivery_id bigint unique, member_id bigint, order_date timestamp(6), order_id bigint not null, status enum ('CANCEL','ORDER'), primary key (order_id))
+2025-07-29T16:09:05.010+09:00 DEBUG 21464 --- [    Test worker] org.hibernate.SQL                        : create table users (department_id bigint, id bigint not null, substitute_id bigint, email varchar(255), employee_no varchar(255), name varchar(255), position varchar(255), role enum ('CENTER_HEAD','EMPLOYEE','MANAGER'), primary key (id))
+2025-07-29T16:09:05.012+09:00 DEBUG 21464 --- [    Test worker] org.hibernate.SQL                        : create table vacation_request (end_date date not null, start_date date not null, total_days integer not null, applicant_id bigint, final_approved_at timestamp(6), submitted_at timestamp(6), substitute_id bigint, vacation_request_id bigint generated by default as identity, reason varchar(255), status enum ('APPROVED','CANCELED','DRAFT','PENDING','REJECTED') not null, vacation_type enum ('ANNUAL','HALF_DAY','OTHER','SICK') not null, primary key (vacation_request_id))
+2025-07-29T16:09:05.013+09:00 DEBUG 21464 --- [    Test worker] org.hibernate.SQL                        : alter table if exists approval_step add constraint FKraq9phkok49oj9k2y6wh15mtn foreign key (approver_id) references member
+2025-07-29T16:09:05.032+09:00 DEBUG 21464 --- [    Test worker] org.hibernate.SQL                        : alter table if exists approval_step add constraint FKic5me2lucrgmxcwfbsjuecyok foreign key (vacation_request_id) references vacation_request
+2025-07-29T16:09:05.033+09:00 DEBUG 21464 --- [    Test worker] org.hibernate.SQL                        : alter table if exists category add constraint FK2y94svpmqttx80mshyny85wqr foreign key (parent_id) references category
+2025-07-29T16:09:05.034+09:00 DEBUG 21464 --- [    Test worker] org.hibernate.SQL                        : alter table if exists category_item add constraint FKu8b4lwqutcdq3363gf6mlujq foreign key (item_id) references item
+2025-07-29T16:09:05.035+09:00 DEBUG 21464 --- [    Test worker] org.hibernate.SQL                        : alter table if exists category_item add constraint FKcq2n0opf5shyh84ex1fhukcbh foreign key (category_id) references category
+2025-07-29T16:09:05.037+09:00 DEBUG 21464 --- [    Test worker] org.hibernate.SQL                        : alter table if exists order_item add constraint FKija6hjjiit8dprnmvtvgdp6ru foreign key (item_id) references item
+2025-07-29T16:09:05.039+09:00 DEBUG 21464 --- [    Test worker] org.hibernate.SQL                        : alter table if exists order_item add constraint FKt4dc2r9nbvbujrljv3e23iibt foreign key (order_id) references orders
+2025-07-29T16:09:05.040+09:00 DEBUG 21464 --- [    Test worker] org.hibernate.SQL                        : alter table if exists orders add constraint FKtkrur7wg4d8ax0pwgo0vmy20c foreign key (delivery_id) references delivery
+2025-07-29T16:09:05.041+09:00 DEBUG 21464 --- [    Test worker] org.hibernate.SQL                        : alter table if exists orders add constraint FKpktxwhj3x9m4gth5ff6bkqgeb foreign key (member_id) references member
+2025-07-29T16:09:05.042+09:00 DEBUG 21464 --- [    Test worker] org.hibernate.SQL                        : alter table if exists users add constraint FKfi832e3qv89fq376fuh8920y4 foreign key (department_id) references department
+2025-07-29T16:09:05.043+09:00 DEBUG 21464 --- [    Test worker] org.hibernate.SQL                        : alter table if exists users add constraint FK1dgaxdv8xrgj1ce1mm9orpuly foreign key (substitute_id) references users
+2025-07-29T16:09:05.045+09:00 DEBUG 21464 --- [    Test worker] org.hibernate.SQL                        : alter table if exists vacation_request add constraint FKf20o97srdnuypf6puuhds23md foreign key (applicant_id) references member
+2025-07-29T16:09:05.046+09:00 DEBUG 21464 --- [    Test worker] org.hibernate.SQL                        : alter table if exists vacation_request add constraint FKkpcneodjafao499vwedddapve foreign key (substitute_id) references member
+2025-07-29T16:09:05.054+09:00  INFO 21464 --- [    Test worker] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-07-29T16:09:05.463+09:00  WARN 21464 --- [    Test worker] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-07-29T16:09:06.042+09:00  INFO 21464 --- [    Test worker] j.jpashop.service.OrderServiceTest       : Started OrderServiceTest in 5.177 seconds (process running for 7.308)
+2025-07-29T16:09:06.716+09:00 DEBUG 21464 --- [    Test worker] org.hibernate.SQL                        : select next value for member_seq
+2025-07-29T16:09:06.767+09:00 DEBUG 21464 --- [    Test worker] org.hibernate.SQL                        : select next value for item_seq
+2025-07-29T16:09:06.802+09:00 DEBUG 21464 --- [    Test worker] org.hibernate.SQL                        : select next value for member_seq
+2025-07-29T16:09:06.803+09:00 DEBUG 21464 --- [    Test worker] org.hibernate.SQL                        : select next value for item_seq
+2025-07-29T16:09:06.804+09:00 DEBUG 21464 --- [    Test worker] org.hibernate.SQL                        : select next value for orders_seq
+2025-07-29T16:09:06.806+09:00 DEBUG 21464 --- [    Test worker] org.hibernate.SQL                        : select next value for delivery_seq
+2025-07-29T16:09:06.808+09:00 DEBUG 21464 --- [    Test worker] org.hibernate.SQL                        : select next value for order_item_seq
+2025-07-29T16:09:06.816+09:00 DEBUG 21464 --- [    Test worker] org.hibernate.SQL                        : select next value for orders_seq
+2025-07-29T16:09:06.817+09:00 DEBUG 21464 --- [    Test worker] org.hibernate.SQL                        : select next value for delivery_seq
+2025-07-29T16:09:06.817+09:00 DEBUG 21464 --- [    Test worker] org.hibernate.SQL                        : select next value for order_item_seq
+</pre>
+</span>
+</div>
+</div>
+<div id="footer">
+<p>
+<div>
+<label class="hidden" id="label-for-line-wrapping-toggle" for="line-wrapping-toggle">Wrap lines
+<input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
+</label>
+</div>Generated by 
+<a href="https://www.gradle.org">Gradle 8.14.2</a> at 2025. 7. 29. 오후 4:09:06</p>
+</div>
+</div>
+</body>
+</html>

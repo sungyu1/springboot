@@ -1,0 +1,247 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>휴가원작성</title>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/fontawesome-all.min.css}"/>
+    <link rel="stylesheet" th:href="@{/css/vacation-style.css}"/>
+    <link rel="stylesheet" th:href="@{/css/main.css}"/>
+    <link rel="stylesheet" th:href="@{/css/approval-style.css}"/>
+</head>
+<body class="is-preload">
+
+<!-- Wrapper -->
+<div id="wrapper">
+
+    <!-- Main -->
+    <div id="main">
+        <div class="inner">
+
+            <!-- Header -->
+            <header id="header">
+                <a href="/index" class="logo"><strong>선한병원</strong></a>
+            </header>
+
+                         <!-- Section: 휴가원 작성 -->
+             <section>
+                 <header class="major">
+                     <h2>휴가원 작성</h2>
+                 </header>
+                 
+                                   <!-- 에러 메시지 표시 -->
+                  <div th:if="${param.error}" class="error-message">
+                      <div th:if="${param.error == 'dept'}" class="alert alert-danger">
+                          부서 정보가 없습니다. 관리자에게 문의하세요.
+                      </div>
+                      <div th:if="${param.error == 'leader'}" class="alert alert-danger">
+                          해당 부서의 부서장을 찾을 수 없습니다. 관리자에게 문의하세요.
+                      </div>
+                      <div th:if="${param.error == 'hr'}" class="alert alert-danger">
+                          인사담당자를 선택해주세요.
+                      </div>
+                  </div>
+
+                <div class="form-container">
+                    <form th:action="@{/vacation/submit}" th:object="${vacationRequestForm}" method="post">
+
+                        <!-- 휴가원 제목과 결재라인 -->
+                        <div class="header-layout">
+                            <div class="approval-section">
+                                <h4>결재 라인</h4>
+                                <table class="approval-line">
+                                    <tr>
+                                        <th rowspan="2" class="approval-header">결재</th>
+                                        <th class="approval-role">대직자</th>
+                                        <th class="approval-role">부서장</th>
+                                        <th class="approval-role">인사담당</th>
+                                        <th class="approval-role approval-wide">진료지원센터장</th>
+                                        <th class="approval-role">행정원장</th>
+                                        <th class="approval-role">대표원장</th>
+                                    </tr>
+                                    <tr>
+                                        <td class="approval-cell">
+                                            <select th:field="*{substituteId}" class="form-control approval-select"
+                                                    required>
+                                                <option th:each="member : ${substitutes}"
+                                                        th:value="${member.id}"
+                                                        th:text="${member.name}">
+                                                </option>
+                                            </select>
+                                            <img id="sign1" class="signature-img"/>
+                                        </td>
+                                                                                 <td class="approval-cell">
+                                             <span class="auto-approver">자동 설정</span>
+                                             <img id="sign2" class="signature-img"/>
+                                         </td>
+                                                                                 <td class="approval-cell">
+                                             <select th:field="*{hrStaffId}" class="form-control approval-select"
+                                                     onchange="setApprovalSign(this, 'sign3')" required>
+                                                 <option value="">선택</option>
+                                                 <option th:each="hr : ${hrStaff}"
+                                                         th:value="${hr.id}"
+                                                         th:text="${hr.name}">
+                                                 </option>
+                                             </select>
+                                             <img id="sign3" class="signature-img"/>
+                                         </td>
+                                        <td class="approval-cell">
+                                            <select onchange="setApprovalSign(this, 'sign4')"
+                                                    class="approval-select approval-select-wide">
+                                                <option value="">선택</option>
+                                                <option value="ceo1">센터장A</option>
+                                                <option value="ceo2">센터장B</option>
+                                            </select>
+                                            <img id="sign4" class="signature-img"/>
+                                        </td>
+                                        <td class="approval-cell">
+                                            <select onchange="setApprovalSign(this, 'sign5')" class="approval-select">
+                                                <option value="">선택</option>
+                                                <option value="admin1">행정원장A</option>
+                                                <option value="admin2">행정원장B</option>
+                                            </select>
+                                            <img id="sign5" class="signature-img"/>
+                                        </td>
+                                        <td class="approval-cell">
+                                            <select onchange="setApprovalSign(this, 'sign6')" class="approval-select">
+                                                <option value="">선택</option>
+                                                <option value="ceo1">대표원장A</option>
+                                                <option value="ceo2">대표원장B</option>
+                                            </select>
+                                            <img id="sign6" class="signature-img"/>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- 신청자 정보 테이블 -->
+                        <table class="applicant-table">
+                            <tr>
+                                <td rowspan="3" class="applicant-header">신청자</td>
+                                <td class="info-label">소 속</td>
+                                <td class="info-input">
+                                    <input type="text" name="deptCode" th:value="${deptName}" readonly
+                                           class="readonly-input">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="info-label">성 명</td>
+                                <td class="info-input">
+                                    <input type="text" name="name" th:value="${loginMember.name}" readonly
+                                           class="readonly-input">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="info-label">직 급</td>
+                                <td class="info-input">
+                                    <input type="text" name="jobLevel" th:value="${jobLevelName}" readonly
+                                           class="readonly-input">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="info-label">연락처</td>
+                                <td colspan="2" class="contact-info">
+                                    <span>집소:</span>
+                                    <input type="text" class="contact-input" th:value="${loginMember.address?.address}" readonly>
+                                    <span>전화번호:</span>
+                                    <input type="text" class="contact-input" th:value="${loginMember.phone}" readonly>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <!-- 휴가 종류 및 기간 -->
+                        <table class="vacation-table">
+                            <tr>
+                                <td rowspan="2" class="vacation-header">휴가신청내역</td>
+                                                                 <td class="vacation-types">
+                                                                           <select th:field="*{vacationType}" required class="vacation-select">
+                                          <option value="">휴가종류 선택</option>
+                                          <option th:each="type : ${vacationTypes}"
+                                                  th:value="${type}"
+                                                  th:text="${type.displayName}">
+                                          </option>
+                                      </select>
+                                 </td>
+                            </tr>
+                                                         <tr>
+                                 <td class="vacation-content">
+                                     <label class="content-label">휴가내용</label>
+                                     <input type="text" th:field="*{reason}" class="content-input">
+                                 </td>
+                             </tr>
+                        </table>
+
+                        <!-- 기간 선택 -->
+                        <table class="period-table">
+                            <tr>
+                                <td class="period-header">기간</td>
+                                <td class="period-dates">
+                                    <div class="date-selection">
+                                        <input type="date" name="startDate" id="startDate" required> ~
+                                        <input type="date" name="endDate" id="endDate" required>
+                                    </div>
+                                    <div class="time-selection" id="timeSelection" style="display: none;">
+                                        <label class="time-option">
+                                            <input type="radio" name="timeType" value="종일" checked> 종일
+                                        </label>
+                                        <label class="time-option">
+                                            <input type="radio" name="timeType" value="오전"> 오전
+                                        </label>
+                                        <label class="time-option">
+                                            <input type="radio" name="timeType" value="오후"> 오후
+                                        </label>
+                                    </div>
+                                </td>
+                                <td class="total-days">
+                                    <strong>총 기간 : </strong>
+                                    <input type="number" name="days" id="days" min="0.5" step="0.5" readonly
+                                           class="days-input">
+                                    <strong>일</strong>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <!-- 서명 및 제출 -->
+                        <div class="signature-section">
+                            <div class="signature-container">
+                                <div class="signature-line">
+                                    <label><strong>본인 서명</strong></label>
+                                    <span class="signature-name" th:text="${loginMember.name}">사용자명</span>
+                                    <span class="signature-mark" id="signatureMark">(인)</span>
+                                    <button type="button" class="signature-btn" onclick="showSignature()">서명 확인</button>
+                                </div>
+                                <img id="signaturePreview" class="signature-preview" style="display:none;"/>
+                                <input type="hidden" name="signatureImage" id="signatureImage"/>
+                                <input type="hidden" name="submitDate" id="submitDate"/>
+                                <!-- 서명 데이터를 JavaScript에서 사용하기 위한 hidden input -->
+                                <input type="hidden" id="userSignatureData" th:value="${loginMember.signatureImage}"/>
+                                <input type="hidden" id="userNameData" th:value="${loginMember.name}"/>
+                            </div>
+                        </div>
+
+                        <div class="actions">
+                            <button type="submit" class="primary">제출</button>
+                            <button type="reset">취소</button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+        </div>
+    </div>
+    <!-- Sidebar -->
+    <div th:replace="~{fragments/sidebar :: #sidebar}"/>
+    <!-- end sidebar -->
+</div>
+<!-- Scripts -->
+<script th:src="@{/js/jquery.min.js}"></script>
+<script th:src="@{/js/bootstrap.bundle.js}"></script>
+<script th:src="@{/js/browser.min.js}"></script>
+<script th:src="@{/js/breakpoints.min.js}"></script>
+<script th:src="@{/js/util.js}"></script>
+<script th:src="@{/js/main.js}"></script>
+<script th:src="@{/js/vacation-form.js}"></script>
+<script th:src="@{/js/logout-confirm.js}"></script>
+</body>
+</html>

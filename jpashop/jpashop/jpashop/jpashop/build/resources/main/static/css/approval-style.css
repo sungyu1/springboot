@@ -1,0 +1,167 @@
+/* 상태 배지 스타일 */
+.status-badge {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: bold;
+    text-align: center;
+    display: inline-block;
+    min-width: 60px;
+}
+
+.status-pending {
+    background-color: #ffc107;
+    color: #000;
+}
+
+.status-approved {
+    background-color: #28a745;
+    color: #fff;
+}
+
+.status-rejected {
+    background-color: #dc3545;
+    color: #fff;
+}
+
+.status-canceled {
+    background-color: #6c757d;
+    color: #fff;
+}
+
+/* 결재선 스타일 */
+.approval-line {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.approval-step {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.step-number {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: #007bff;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.step-info {
+    text-align: center;
+    min-width: 120px;
+}
+
+.approver-name {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.step-status {
+    margin-bottom: 5px;
+}
+
+.step-comment {
+    font-size: 12px;
+    color: #666;
+    margin-bottom: 3px;
+}
+
+.step-date {
+    font-size: 11px;
+    color: #999;
+}
+
+.step-arrow {
+    font-size: 18px;
+    color: #007bff;
+    font-weight: bold;
+}
+
+/* 서명 이미지 스타일 */
+.signature-image {
+    max-width: 200px;
+    max-height: 100px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+/* 반려 정보 스타일 */
+.rejection-info {
+    background-color: #f8f9fa;
+    padding: 15px;
+    border-radius: 4px;
+    border-left: 4px solid #dc3545;
+}
+
+.rejection-reason {
+    font-weight: bold;
+    color: #dc3545;
+}
+
+/* 전체 상태 표시 */
+.overall-status {
+    background-color: #e7f3ff;
+    padding: 15px;
+    border-radius: 4px;
+    border-left: 4px solid #007bff;
+}
+
+.status-display {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+/* 테이블 스타일 */
+.table th {
+    background-color: #f8f9fa;
+    border-top: none;
+}
+
+.table td {
+    vertical-align: middle;
+}
+
+/* 카드 스타일 */
+.card {
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    border: none;
+}
+
+.card-header {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #dee2e6;
+    font-weight: bold;
+}
+
+/* 버튼 스타일 */
+.btn-sm {
+    padding: 4px 8px;
+    font-size: 12px;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+    .approval-line {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .approval-step {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .step-arrow {
+        transform: rotate(90deg);
+    }
+}

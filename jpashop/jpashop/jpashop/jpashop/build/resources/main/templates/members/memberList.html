@@ -1,0 +1,115 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+  <title>Editorial by HTML5 UP</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <link rel="stylesheet" th:href="@{/css/fontawesome-all.min.css}" />
+  <link rel="stylesheet" th:href="@{/css/main.css}" />
+  <link rel="stylesheet" th:href="@{/css/members.css}" />
+</head>
+<body class="is-preload">
+
+<!-- Wrapper -->
+<div id="wrapper">
+
+  <!-- Main -->
+  <div id="main">
+    <div class="inner">
+
+      <!-- Header (페이지 상단 바) -->
+      <header id="header">
+        <a href="/index" class="logo"><strong>선한병원</strong></a>
+      </header>
+
+      <!-- Section: 직원 목록 -->
+      <section>
+        <header class="major">
+          <h2>직원 목록</h2>
+        </header>
+
+        <div class="table-wrapper">
+          <table class="table table-striped">
+            <thead>
+            <tr>
+              <th>ID</th>
+              <th>이름</th>
+              <th>전화번호</th>
+              <th>부서</th>
+              <th>직급</th>
+              <th>근무상태</th>
+              <th>주소</th>
+              <th>서명</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="member : ${members}">
+              <td th:text="${member.id}"></td>
+              <td th:text="${member.name}"></td>
+              <td th:text="${member.phone}"></td>
+
+              <!-- 부서코드 해석 + 배지 -->
+              <td th:switch="${member.deptCode}">
+                <span class="dept-badge" th:case="'im'">내과</span>
+                <span class="dept-badge" th:case="'gs'">외과</span>
+                <span class="dept-badge" th:case="'ns'">신경외과</span>
+                <span class="dept-badge" th:case="'os'">정형외과</span>
+                <span class="dept-badge" th:case="'cs'">흉부외과</span>
+                <span class="dept-badge" th:case="'ms'">진료지원센터</span>
+                <span class="dept-badge" th:case="*">기타</span>
+              </td>
+
+              <!-- 직급 + 배지 -->
+              <td th:switch="${member.jobLevel}">
+                <span class="job-badge" th:case="'1'">사원</span>
+                <span class="job-badge" th:case="'2'">부서장</span>
+                <span class="job-badge" th:case="'3'">원장</span>
+                <span class="job-badge" th:case="'4'">진료지원 센터장</span>
+                <span class="job-badge" th:case="'5'">행정원장</span>
+                <span class="job-badge" th:case="'6'">대표원장</span>
+                <span class="job-badge" th:case="'7'">관리자</span>
+                <span class="job-badge" th:case="'8'">전무</span>
+                <span class="job-badge" th:case="*">기타</span>
+              </td>
+
+              <!-- 근무상태 + 배지 -->
+              <td th:switch="${member.useFlag}">
+                <span class="status-badge status-active" th:case="'1'">근무</span>
+                <span class="status-badge status-inactive" th:case="'0'">퇴사</span>
+                <span class="status-badge" th:case="*">-</span>
+              </td>
+
+              <td th:text="${member.address}"></td>
+              <td>
+                <img class="signature-img"
+                     th:if="${member.signatureImage}"
+                     th:src="@{/members/signature/{memberId}(memberId=${member.id})}"
+                     alt="서명"
+                     style="max-width: 100px; max-height: 50px;">
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+      <!-- /Section -->
+    </div>
+  </div>
+
+  <!-- Sidebar -->
+  <div th:replace="~{fragments/sidebar :: #sidebar}" />
+</div>
+<!-- /Wrapper -->
+
+<!-- Scripts (index.html 과 동일) -->
+<script th:src="@{/js/jquery.min.js}"></script>
+<script th:src="@{/js/bootstrap.bundle.js}"></script>
+<script th:src="@{/js/browser.min.js}"></script>
+<script th:src="@{/js/breakpoints.min.js}"></script>
+<script th:src="@{/js/util.js}"></script>
+<script th:src="@{/js/main.js}"></script>
+<script th:src="@{/js/logout-confirm.js}"></script>
+
+</body>
+</html>
