@@ -40,5 +40,13 @@ public interface ApprovalStepRepository extends JpaRepository<ApprovalStep, Long
            "AND aps.stepOrder = :stepOrder")
     ApprovalStep findByVacationRequestIdAndStepOrder(@Param("requestId") Long requestId, 
                                                     @Param("stepOrder") Integer stepOrder);
+
+    // 결재 단계 업데이트 (Native Query)
+    @Query(value = "UPDATE approval_step SET status = :status, approval_comment = :comment, approved_at = :approvedAt " +
+                   "WHERE approval_step_id = :stepId", nativeQuery = true)
+    void updateApprovalStep(@Param("stepId") Long stepId, 
+                           @Param("status") String status, 
+                           @Param("comment") String comment, 
+                           @Param("approvedAt") java.time.LocalDateTime approvedAt);
 }
 

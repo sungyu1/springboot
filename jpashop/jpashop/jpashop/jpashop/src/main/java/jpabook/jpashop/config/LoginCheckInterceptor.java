@@ -32,6 +32,7 @@ public class LoginCheckInterceptor implements HandlerInterceptor {
         return requestURI.equals("/") ||
                requestURI.equals("/login") ||
                requestURI.equals("/members/login") ||
+               requestURI.equals("/members/new") ||
                requestURI.equals("/members/create") ||
                requestURI.equals("/css/**") ||
                requestURI.equals("/js/**") ||

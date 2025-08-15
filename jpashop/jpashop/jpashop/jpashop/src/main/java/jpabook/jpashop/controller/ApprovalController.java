@@ -1,16 +1,14 @@
 package jpabook.jpashop.controller;
 
-import jpabook.jpashop.domain.ApprovalStatus;
+import jakarta.servlet.http.HttpSession;
 import jpabook.jpashop.domain.Member;
-import jpabook.jpashop.domain.VacationRequest;
-import jpabook.jpashop.service.ApprovalService;
-import jpabook.jpashop.service.VacationService;
+import jpabook.jpashop.domain.LeaveApplication;
+import jpabook.jpashop.service.LeaveApplicationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import jakarta.servlet.http.HttpSession;
 import java.util.List;
 
 @Controller
@@ -18,115 +16,83 @@ import java.util.List;
 @RequestMapping("/approval")
 public class ApprovalController {
 
-    private final ApprovalService approvalService;
-    private final VacationService vacationService;
+    private final LeaveApplicationService leaveApplicationService;
 
-    // 결재 대기 목록 조회
+    // 결재 대기 목록
     @GetMapping("/pending")
-    public String pendingApprovals(Model model, HttpSession session) {
+    public String pendingApprovals(HttpSession session, Model model) {
         Member loginMember = (Member) session.getAttribute("loginMember");
         if (loginMember == null) {
-            return "redirect:/login";
+            return "redirect:/members/login";
         }
 
-        List<VacationRequest> pendingRequests = approvalService.getPendingApprovals(loginMember.getId());
-        model.addAttribute("pendingRequests", pendingRequests);
-        model.addAttribute("loginMember", loginMember);
-        
+        List<LeaveApplication> pendingRequests = leaveApplicationService.getPendingApprovals(loginMember.getId());
+        model.addAttribute("requests", pendingRequests);
         return "approval/pendingList";
     }
 
     // 결재 상세 보기
     @GetMapping("/detail/{requestId}")
-    public String approvalDetail(@PathVariable Long requestId, Model model, HttpSession session) {
+    public String approvalDetail(@PathVariable Long requestId, HttpSession session, Model model) {
         Member loginMember = (Member) session.getAttribute("loginMember");
         if (loginMember == null) {
-            return "redirect:/login";
+            return "redirect:/members/login";
         }
 
-        VacationRequest vacationRequest = vacationService.getVacationRequest(requestId);
-        if (vacationRequest == null) {
+        LeaveApplication leaveApplication = leaveApplicationService.getLeaveApplication(requestId);
+        if (leaveApplication == null) {
             return "redirect:/approval/pending";
         }
 
-        // 현재 사용자가 결재자 중 하나인지 확인
-        boolean isApprover = approvalService.isApprover(vacationRequest, loginMember.getId());
-        if (!isApprover) {
-            return "redirect:/approval/pending";
-        }
-
-        // 현재 결재자 ID 찾기
-        String currentApproverId = vacationRequest.getApprovalSteps().stream()
-                .filter(step -> step.getStatus() == ApprovalStatus.PENDING)
-                .findFirst()
-                .map(step -> step.getApprover().getId())
-                .orElse(null);
-
-        model.addAttribute("vacationRequest", vacationRequest);
-        model.addAttribute("loginMember", loginMember);
-        model.addAttribute("approvalSteps", vacationRequest.getApprovalSteps());
-        model.addAttribute("currentApproverId", currentApproverId);
-        
+        model.addAttribute("request", leaveApplication);
+        model.addAttribute("currentApproverId", leaveApplication.getCurrentApproverId());
         return "approval/approvalDetail";
     }
 
-    // 결재 처리 (승인/반려)
+    // 결재 처리
     @PostMapping("/process/{requestId}")
-    @ResponseBody
     public String processApproval(@PathVariable Long requestId,
-                                 @RequestParam ApprovalStatus decision,
+                                 @RequestParam String action,
                                  @RequestParam(required = false) String comment,
                                  HttpSession session) {
         Member loginMember = (Member) session.getAttribute("loginMember");
         if (loginMember == null) {
-            return "ERROR: 로그인이 필요합니다.";
+            return "redirect:/members/login";
         }
 
-        try {
-            approvalService.processApproval(requestId, loginMember.getId(), decision, comment);
-            return "SUCCESS";
-        } catch (Exception e) {
-            return "ERROR: " + e.getMessage();
-        }
+        boolean isApproved = "approve".equals(action);
+        leaveApplicationService.processApproval(requestId, loginMember.getId(), isApproved, comment);
+
+        return "redirect:/approval/pending";
     }
 
-    // 내가 신청한 휴가 목록
+    // 내 신청 목록
     @GetMapping("/my-requests")
-    public String myRequests(Model model, HttpSession session) {
+    public String myRequests(HttpSession session, Model model) {
         Member loginMember = (Member) session.getAttribute("loginMember");
         if (loginMember == null) {
-            return "redirect:/login";
+            return "redirect:/members/login";
         }
 
-        List<VacationRequest> myRequests = vacationService.getMyVacationRequests(loginMember.getId());
-        model.addAttribute("myRequests", myRequests);
-        model.addAttribute("loginMember", loginMember);
-        
+        List<LeaveApplication> myRequests = leaveApplicationService.getMyLeaveApplications(loginMember.getId());
+        model.addAttribute("requests", myRequests);
         return "approval/myRequests";
     }
 
-    // 내가 신청한 휴가 상세 보기
+    // 내 신청 상세 보기
     @GetMapping("/my-detail/{requestId}")
-    public String myRequestDetail(@PathVariable Long requestId, Model model, HttpSession session) {
+    public String myRequestDetail(@PathVariable Long requestId, HttpSession session, Model model) {
         Member loginMember = (Member) session.getAttribute("loginMember");
         if (loginMember == null) {
-            return "redirect:/login";
+            return "redirect:/members/login";
         }
 
-        VacationRequest vacationRequest = vacationService.getVacationRequest(requestId);
-        if (vacationRequest == null) {
+        LeaveApplication leaveApplication = leaveApplicationService.getLeaveApplication(requestId);
+        if (leaveApplication == null || !leaveApplication.getApplicant().getId().equals(loginMember.getId())) {
             return "redirect:/approval/my-requests";
         }
 
-        // 현재 사용자가 신청자인지 확인
-        if (!vacationRequest.getApplicant().getId().equals(loginMember.getId())) {
-            return "redirect:/approval/my-requests";
-        }
-
-        model.addAttribute("vacationRequest", vacationRequest);
-        model.addAttribute("loginMember", loginMember);
-        model.addAttribute("approvalSteps", vacationRequest.getApprovalSteps());
-        
+        model.addAttribute("request", leaveApplication);
         return "approval/myRequestDetail";
     }
 }

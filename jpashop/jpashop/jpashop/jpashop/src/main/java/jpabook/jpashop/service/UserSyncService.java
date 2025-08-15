@@ -33,8 +33,8 @@ public class UserSyncService {
             newMember.setId(oUser.getUserId());
             newMember.setName(oUser.getName());
             newMember.setDeptCode(oUser.getDeptCode());
-            newMember.setJobType(oUser.getJobType());
-            newMember.setUseFlag(oUser.getUseFlag());
+            newMember.setJobLevel(oUser.getJobType().toString()); // jobType을 jobLevel로 매핑
+            newMember.setUseFlag(oUser.getUseFlag().toString());
             newMember.setPassword("default123"); // 초기 비밀번호 설정
 
             localUserRepository.save(newMember);

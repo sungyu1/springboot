@@ -48,18 +48,18 @@
             <span th:case="'os'">정형외과</span>
             <span th:case="'cs'">흉부외과</span>
             <span th:case="'ms'">진료지원센터</span>
-            <span th:case="*">기타</span>
+            <span th:case="'si'">전략정보실</span>
           </span>
                 </li>
                 <li class="icon solid fa-briefcase">
-          <span th:switch="${session.loginMember.jobType}">
-            <span th:case="1">사원</span>
-            <span th:case="2">부서장</span>
-            <span th:case="3">원장</span>
-            <span th:case="4">진료지원</span>
-            <span th:case="5">센터장</span>
-            <span th:case="6">관리자</span>
-            <span th:case="*">기타</span>
+          <span th:switch="${session.loginMember.jobLevel}">
+            <span th:case="'1'">사원</span>
+            <span th:case="'2'">부서장</span>
+            <span th:case="'3'">원장</span>
+            <span th:case="'4'">진료지원 센터장</span>
+            <span th:case="'5'">행정원장</span>
+            <span th:case="'6'">대표원장</span>
+            <span th:case="'7'">관리자</span>
           </span>
                 </li>
                 <li class="icon solid fa-phone">

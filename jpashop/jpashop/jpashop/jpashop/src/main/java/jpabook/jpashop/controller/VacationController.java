@@ -34,19 +34,21 @@ public class VacationController {
             default -> "미지정";
         };
 
-        String jobTypeName = switch (loginMember.getJobType()) {
-            case 1 -> "사원";
-            case 2 -> "부서장";
-            case 3 -> "원장";
-            case 4 -> "진료지원";
-            case 5 -> "센터장";
-            case 6 -> "관리자";
+        String jobLevelName = switch (loginMember.getJobLevel()) {
+            case "1" -> "사원";
+            case "2" -> "부서장";
+            case "3" -> "원장";
+            case "4" -> "진료지원 센터장";
+            case "5" -> "행정원장";
+            case "6" -> "대표원장";
+            case "7" -> "관리자";
+            case "8" -> "전무";
             default -> "미지정";
         };
 
         model.addAttribute("loginMember", loginMember);
         model.addAttribute("deptName", deptName);
-        model.addAttribute("jobTypeName", jobTypeName);
+        model.addAttribute("jobLevelName", jobLevelName);
     }
 
     @GetMapping("/index")
@@ -69,7 +71,7 @@ public class VacationController {
             return "error/error";
         }
 
-        List<Member> substitutes = memberService.findByDeptAndJob(loginMember.getDeptCode(), loginMember.getJobType());
+        List<Member> substitutes = memberService.findByDeptAndJob(loginMember.getDeptCode(), loginMember.getJobLevel());
         List<Member> hrStaff = memberService.findHrStaff(); // 인사담당자 목록
 
         model.addAttribute("vacationRequestForm", new VacationRequestForm());

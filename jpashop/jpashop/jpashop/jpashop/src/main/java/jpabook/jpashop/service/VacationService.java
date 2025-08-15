@@ -22,31 +22,23 @@ public class VacationService {
     private final MemberRepository memberRepository;
     private final ApprovalStepRepository approvalStepRepository;
     @Transactional
-    public void submitVacation(Member applicant, Member substitute, Member hrStaff, VacationRequestForm form) {
+    public void submitVacation(Member applicant, Member substitute, Member deptLeader, VacationRequestForm form) {
         VacationRequest request = new VacationRequest();
         request.setApplicant(applicant);
         request.setSubstitute(substitute);
         request.setStartDate(form.getStartDate());
         request.setEndDate(form.getEndDate());
-        request.setTotalDays(form.getDays());
         request.setReason(form.getReason());
         request.setStatus(VacationStatus.PENDING);
         request.setVacationType(form.getVacationType());
         request.setSubmittedAt(LocalDateTime.now());
 
-        // 회원가입 시 등록한 서명을 그대로 저장
-        request.setSignatureImage(applicant.getSignatureImage());
-
-        // 부서장 자동 찾기
-        Member deptLeader = findDepartmentLeader(applicant);
-        if (deptLeader == null) {
-            throw new IllegalStateException("해당 부서의 부서장을 찾을 수 없습니다.");
-        }
+        // 회원가입 시 등록한 서명을 그대로 저장 (BLOB 타입이므로 주석 처리)
+        // request.setSignatureImage(applicant.getSignatureImage());
 
         List<ApprovalStep> steps = List.of(
                 createStep(request, substitute, 1),
-                createStep(request, deptLeader, 2),
-                createStep(request, hrStaff, 3)
+                createStep(request, deptLeader, 2)
         );
         request.setApprovalSteps(steps);
 
@@ -63,21 +55,16 @@ public class VacationService {
     }
 
     private Member findDepartmentLeader(Member applicant) {
-        // 신청자의 부서 코드가 null인 경우 처리
-        if (applicant.getDeptCode() == null) {
-            throw new IllegalStateException("신청자의 부서 정보가 없습니다.");
-        }
-        
         return memberRepository.findAll().stream()
-                .filter(m -> m.getDeptCode() != null && m.getDeptCode().equals(applicant.getDeptCode()))
-                .filter(m -> m.getJobType() == 2) // 2: 부서장
+                .filter(m -> m.getDeptCode().equals(applicant.getDeptCode()))
+                .filter(m -> "2".equals(m.getJobLevel())) // 2: 부서장
                 .findFirst()
                 .orElse(null);
     }
 
     private Member findCenterHead() {
         return memberRepository.findAll().stream()
-                .filter(m -> m.getJobType() == 5) // 5: 센터장
+                .filter(m -> "5".equals(m.getJobLevel())) // 5: 행정원장
                 .findFirst()
                 .orElse(null);
     }
@@ -90,70 +77,12 @@ public class VacationService {
     // 내가 신청한 휴가 목록 조회
     public List<VacationRequest> getMyVacationRequests(String applicantId) {
         List<Object[]> results = vacationRepository.findMyVacationRequestsNative(applicantId);
-        List<VacationRequest> requests = results.stream()
+        return results.stream()
                 .map(this::mapToVacationRequest)
                 .toList();
-        
-        // 각 휴가 신청에 대해 ApprovalSteps 정보 추가
-        for (VacationRequest request : requests) {
-            List<ApprovalStep> steps = findApprovalStepsByRequestId(request.getId());
-            request.setApprovalSteps(steps);
-        }
-        
-        return requests;
     }
 
-    // 휴가 신청 ID로 결재 단계들 조회
-    private List<ApprovalStep> findApprovalStepsByRequestId(Long requestId) {
-        List<Object[]> results = approvalStepRepository.findApprovalStepsByRequestIdNative(requestId);
-        return results.stream()
-                .map(this::mapToApprovalStep)
-                .toList();
-    }
-
-    // Object[]를 ApprovalStep으로 변환
-    private ApprovalStep mapToApprovalStep(Object[] row) {
-        ApprovalStep step = new ApprovalStep();
-        
-        // Oracle NUMBER 타입은 BigDecimal로 반환되므로 적절히 변환
-        step.setId(((java.math.BigDecimal) row[0]).longValue());
-        
-        // vacation_request_id는 사용하지 않음 (이미 VacationRequest에 연결됨)
-        // step.setVacationRequest(vacationRequest);
-        
-        // approver_id로 Member 조회
-        String approverId = (String) row[2];
-        Member approver = findMemberById(approverId);
-        step.setApprover(approver);
-        
-        // step_order_num
-        Object stepOrderObj = row[3];
-        if (stepOrderObj instanceof java.math.BigDecimal) {
-            step.setStepOrder(((java.math.BigDecimal) stepOrderObj).intValue());
-        } else {
-            step.setStepOrder((Integer) stepOrderObj);
-        }
-        
-        // status
-        step.setStatus(jpabook.jpashop.domain.ApprovalStatus.valueOf((String) row[4]));
-        
-        // approval_comment
-        step.setComment((String) row[5]);
-        
-        // approved_at
-        Object approvedAtObj = row[6];
-        if (approvedAtObj != null) {
-            if (approvedAtObj instanceof java.sql.Timestamp) {
-                step.setApprovedAt(((java.sql.Timestamp) approvedAtObj).toLocalDateTime());
-            } else {
-                step.setApprovedAt((java.time.LocalDateTime) approvedAtObj);
-            }
-        }
-        
-        return step;
-    }
-
-    // Object[]를 VacationRequest로 변환 (ApprovalService와 동일한 로직)
+    // Object[]를 VacationRequest로 변환
     private VacationRequest mapToVacationRequest(Object[] row) {
         VacationRequest request = new VacationRequest();
         
@@ -185,17 +114,10 @@ public class VacationService {
         request.setVacationType(jpabook.jpashop.domain.VacationType.valueOf((String) row[6]));
         request.setReason((String) row[7]);
         
-        // status 설정 - 디버깅 로그 추가
+        // status 설정
         String statusStr = (String) row[8];
-        System.out.println("DEBUG: VacationRequest ID=" + request.getId() + ", Status from DB=" + statusStr);
-        System.out.println("DEBUG: Row[8] type=" + (row[8] != null ? row[8].getClass().getName() : "null"));
-        System.out.println("DEBUG: Row[8] value=" + row[8]);
-        
         if (statusStr != null) {
             request.setStatus(jpabook.jpashop.domain.VacationStatus.valueOf(statusStr));
-            System.out.println("DEBUG: VacationRequest ID=" + request.getId() + ", Status after setting=" + request.getStatus());
-        } else {
-            System.out.println("DEBUG: Status is null for VacationRequest ID=" + request.getId());
         }
         
         // submitted_at과 final_approved_at도 Timestamp일 수 있음

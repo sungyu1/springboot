@@ -15,8 +15,7 @@ import java.util.List;
 public class VacationRequest {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "vacation_request_seq")
-    @SequenceGenerator(name = "vacation_request_seq", sequenceName = "vacation_request_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "vacation_request_id")
     private Long id;
 
@@ -55,7 +54,7 @@ public class VacationRequest {
     private LocalDateTime finalApprovedAt;
 
     @Lob
-    @Column(name = "signature_image", columnDefinition = "CLOB")
+    @Column(name = "signature_image", columnDefinition = "TEXT")
     private String signatureImage;  //서명이미지 저장
 
     @OneToMany(mappedBy = "vacationRequest", cascade = CascadeType.ALL, orphanRemoval = true)

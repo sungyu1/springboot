@@ -1,6 +1,4 @@
-/* 결재 관련 스타일 */
-
-/* 상태 배지 */
+/* 상태 배지 스타일 */
 .status-badge {
     padding: 4px 8px;
     border-radius: 4px;
@@ -26,292 +24,20 @@
     color: #fff;
 }
 
-.status-draft {
-    background-color: #6c757d;
-    color: #fff;
-}
-
 .status-canceled {
     background-color: #6c757d;
     color: #fff;
 }
 
-/* 결재 진행 상태 */
-.approval-progress {
-    display: flex;
-    gap: 4px;
-    align-items: center;
-}
-
-.approval-progress span {
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
+/* 결재선 스타일 */
+.approval-line {
     display: flex;
     align-items: center;
-    justify-content: center;
-    font-size: 12px;
-    font-weight: bold;
-    color: #fff;
-}
-
-.step-approved {
-    background-color: #28a745;
-}
-
-.step-rejected {
-    background-color: #dc3545;
-}
-
-.step-pending {
-    background-color: #ffc107;
-    color: #000;
-}
-
-.step-waiting {
-    background-color: #6c757d;
-}
-
-/* 상세 테이블 */
-.detail-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 20px;
-}
-
-.detail-table th,
-.detail-table td {
-    padding: 12px;
-    border: 1px solid #ddd;
-    text-align: left;
-}
-
-.detail-table th {
-    background-color: #f8f9fa;
-    font-weight: bold;
-    width: 120px;
-}
-
-/* 결재 테이블 */
-.approval-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 20px;
-}
-
-.approval-table th,
-.approval-table td {
-    padding: 12px;
-    border: 1px solid #ddd;
-    text-align: center;
-}
-
-.approval-table th {
-    background-color: #f8f9fa;
-    font-weight: bold;
-}
-
-/* 결재 처리 폼 */
-.approval-form {
-    background-color: #f8f9fa;
-    padding: 20px;
-    border-radius: 8px;
-    margin-top: 20px;
-}
-
-.approval-form .form-group {
-    margin-bottom: 15px;
-}
-
-.approval-form label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: bold;
-}
-
-.approval-form textarea {
-    width: 100%;
-    padding: 8px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    resize: vertical;
-}
-
-.button-group {
-    display: flex;
-    gap: 10px;
-    margin-top: 15px;
-}
-
-.button-group .button {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    text-decoration: none;
-    display: inline-block;
-    text-align: center;
-}
-
-.button.primary {
-    background-color: #007bff;
-    color: #fff;
-}
-
-.button.primary:hover {
-    background-color: #0056b3;
-}
-
-.button.secondary {
-    background-color: #6c757d;
-    color: #fff;
-}
-
-.button.secondary:hover {
-    background-color: #545b62;
-}
-
-.button.danger {
-    background-color: #dc3545;
-    color: #fff;
-}
-
-.button.danger:hover {
-    background-color: #c82333;
-}
-
-/* 글자 수 카운터 */
-.char-count {
-    font-size: 12px;
-    color: #6c757d;
-    font-weight: normal;
-}
-
-/* 결재 처리 폼 개선 */
-.approval-form textarea {
-    width: 100%;
-    padding: 12px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    resize: vertical;
-    font-family: inherit;
-    font-size: 14px;
-}
-
-.approval-form textarea:focus {
-    outline: none;
-    border-color: #007bff;
-    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
-}
-
-/* 버튼 아이콘 */
-.button i {
-    margin-right: 5px;
-}
-
-/* 로딩 상태 */
-.button:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-}
-
-/* 서명 표시 */
-.signature-display {
-    text-align: center;
-    padding: 20px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    background-color: #f8f9fa;
-}
-
-/* 결재 정보 */
-.approval-info {
-    text-align: center;
-    padding: 20px;
-    background-color: #f8f9fa;
-    border-radius: 8px;
-    margin-top: 20px;
-}
-
-.approval-info p {
-    margin-bottom: 15px;
-    color: #6c757d;
-}
-
-/* 자동 설정 표시 */
-.auto-approver {
-    color: #6c757d;
-    font-style: italic;
-    font-size: 14px;
-}
-
-/* 에러 메시지 스타일 */
-.error-message {
-    margin-bottom: 20px;
-}
-
-.alert {
-    padding: 12px 16px;
-    border-radius: 4px;
-    margin-bottom: 16px;
-}
-
-.alert-danger {
-    background-color: #f8d7da;
-    border: 1px solid #f5c6cb;
-    color: #721c24;
-}
-
-/* 에러 페이지 스타일 */
-.error-container {
-    text-align: center;
-    padding: 40px 20px;
-}
-
-.error-container .alert {
-    margin-bottom: 30px;
-}
-
-.error-container .actions {
-    margin-top: 30px;
-}
-
-.error-container .actions .button {
-    margin: 0 10px;
-}
-
-/* 내 휴가 신청 상세보기 스타일 */
-.detail-section {
-    margin-bottom: 30px;
-    padding: 20px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    background-color: #fff;
-}
-
-.detail-section h3 {
-    margin-bottom: 20px;
-    color: #333;
-    border-bottom: 2px solid #007bff;
-    padding-bottom: 10px;
-}
-
-.approval-progress-detail {
-    display: flex;
-    flex-direction: column;
     gap: 20px;
+    flex-wrap: wrap;
 }
 
 .approval-step {
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    overflow: hidden;
-}
-
-.step-header {
-    background-color: #f8f9fa;
-    padding: 15px;
-    border-bottom: 1px solid #ddd;
     display: flex;
     align-items: center;
     gap: 10px;
@@ -320,9 +46,9 @@
 .step-number {
     width: 30px;
     height: 30px;
-    background-color: #007bff;
-    color: #fff;
     border-radius: 50%;
+    background-color: #007bff;
+    color: white;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -330,40 +56,38 @@
     font-size: 14px;
 }
 
-.step-title {
+.step-info {
+    text-align: center;
+    min-width: 120px;
+}
+
+.approver-name {
     font-weight: bold;
-    color: #333;
-}
-
-.step-content {
-    padding: 15px;
-}
-
-.approver-info {
-    margin-bottom: 10px;
+    margin-bottom: 5px;
 }
 
 .step-status {
-    margin-bottom: 10px;
-}
-
-.step-date {
-    margin-bottom: 10px;
-    color: #666;
-    font-size: 14px;
+    margin-bottom: 5px;
 }
 
 .step-comment {
-    background-color: #f8f9fa;
-    padding: 10px;
-    border-radius: 4px;
-    border-left: 4px solid #007bff;
+    font-size: 12px;
+    color: #666;
+    margin-bottom: 3px;
 }
 
-.step-comment strong {
-    color: #333;
+.step-date {
+    font-size: 11px;
+    color: #999;
 }
 
+.step-arrow {
+    font-size: 18px;
+    color: #007bff;
+    font-weight: bold;
+}
+
+/* 서명 이미지 스타일 */
 .signature-image {
     max-width: 200px;
     max-height: 100px;
@@ -371,38 +95,73 @@
     border-radius: 4px;
 }
 
+/* 반려 정보 스타일 */
+.rejection-info {
+    background-color: #f8f9fa;
+    padding: 15px;
+    border-radius: 4px;
+    border-left: 4px solid #dc3545;
+}
+
+.rejection-reason {
+    font-weight: bold;
+    color: #dc3545;
+}
+
+/* 전체 상태 표시 */
+.overall-status {
+    background-color: #e7f3ff;
+    padding: 15px;
+    border-radius: 4px;
+    border-left: 4px solid #007bff;
+}
+
+.status-display {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+/* 테이블 스타일 */
+.table th {
+    background-color: #f8f9fa;
+    border-top: none;
+}
+
+.table td {
+    vertical-align: middle;
+}
+
+/* 카드 스타일 */
+.card {
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    border: none;
+}
+
+.card-header {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #dee2e6;
+    font-weight: bold;
+}
+
+/* 버튼 스타일 */
+.btn-sm {
+    padding: 4px 8px;
+    font-size: 12px;
+}
+
 /* 반응형 디자인 */
 @media (max-width: 768px) {
-    .detail-table th,
-    .detail-table td {
-        padding: 8px;
-        font-size: 14px;
-    }
-    
-    .approval-table th,
-    .approval-table td {
-        padding: 8px;
-        font-size: 12px;
-    }
-    
-    .button-group {
+    .approval-line {
         flex-direction: column;
+        gap: 15px;
     }
     
-    .button-group .button {
-        width: 100%;
+    .approval-step {
+        flex-direction: column;
+        text-align: center;
     }
     
-    .detail-section {
-        padding: 15px;
-        margin-bottom: 20px;
-    }
-    
-    .step-header {
-        padding: 10px;
-    }
-    
-    .step-content {
-        padding: 10px;
+    .step-arrow {
+        transform: rotate(90deg);
     }
 }

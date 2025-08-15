@@ -1,144 +1,99 @@
-<!DOCTYPE HTML>
+<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+    <meta charset="UTF-8">
     <title>내 휴가 신청 상세</title>
-    <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"/>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <link rel="stylesheet" th:href="@{/css/fontawesome-all.min.css}"/>
-    <link rel="stylesheet" th:href="@{/css/main.css}"/>
-    <link rel="stylesheet" th:href="@{/css/approval-style.css}"/>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/css/approval-style.css}">
 </head>
-<body class="is-preload">
-
-<!-- Wrapper -->
-<div id="wrapper">
-
-    <!-- Main -->
-    <div id="main">
-        <div class="inner">
-
-            <!-- Header -->
-            <header id="header">
-                <a href="/index" class="logo"><strong>선한병원</strong></a>
-            </header>
-
-            <!-- Section: 내 휴가 신청 상세 -->
-            <section>
-                <header class="major">
-                    <h2>내 휴가 신청 상세</h2>
-                </header>
-
-                <!-- 신청 정보 -->
-                <div class="detail-section">
-                    <h3>신청 정보</h3>
-                    <table class="detail-table">
-                        <tr>
-                            <th>신청자</th>
-                            <td th:text="${vacationRequest.applicant.name}"></td>
-                            <th>신청일</th>
-                            <td th:text="${#temporals.format(vacationRequest.submittedAt, 'yyyy-MM-dd HH:mm')}"></td>
-                        </tr>
-                        <tr>
-                            <th>휴가 종류</th>
-                            <td th:text="${vacationRequest.vacationType}"></td>
-                            <th>상태</th>
-                            <td>
-                                <span class="status-badge status-draft" th:if="${vacationRequest.status == 'DRAFT'}">임시저장</span>
-                                <span class="status-badge status-pending" th:if="${vacationRequest.status == 'PENDING'}">대기중</span>
-                                <span class="status-badge status-approved" th:if="${vacationRequest.status == 'APPROVED'}">승인됨</span>
-                                <span class="status-badge status-rejected" th:if="${vacationRequest.status == 'REJECTED'}">반려됨</span>
-                                <span class="status-badge status-canceled" th:if="${vacationRequest.status == 'CANCELED'}">취소됨</span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>시작일</th>
-                            <td th:text="${#temporals.format(vacationRequest.startDate, 'yyyy-MM-dd')}"></td>
-                            <th>종료일</th>
-                            <td th:text="${#temporals.format(vacationRequest.endDate, 'yyyy-MM-dd')}"></td>
-                        </tr>
-                        <tr>
-                            <th>총 일수</th>
-                            <td th:text="${vacationRequest.totalDays} + '일'"></td>
-                            <th>대직자</th>
-                            <td th:text="${vacationRequest.substitute.name}"></td>
-                        </tr>
-                        <tr>
-                            <th>휴가 사유</th>
-                            <td colspan="3" th:text="${vacationRequest.reason}"></td>
-                        </tr>
-                    </table>
+<body>
+    <div class="container mt-4">
+        <h2 class="mb-4">내 휴가 신청 상세</h2>
+        
+        <div th:if="${request != null}">
+            <!-- 휴가 신청 정보 -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5>휴가 신청 정보</h5>
                 </div>
-
-                <!-- 결재 진행 상황 -->
-                <div class="detail-section">
-                    <h3>결재 진행 상황</h3>
-                    <div class="approval-progress-detail">
-                        <div class="approval-step" th:each="step : ${approvalSteps}">
-                            <div class="step-header">
-                                <span class="step-number" th:text="${step.stepOrder}"></span>
-                                <span class="step-title" th:text="${step.stepOrder == 1 ? '대직자' : step.stepOrder == 2 ? '부서장' : '인사담당'}"></span>
-                            </div>
-                            <div class="step-content">
-                                <div class="approver-info">
-                                    <strong>결재자:</strong> <span th:text="${step.approver.name}"></span>
-                                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong>신청자:</strong> <span th:text="${request.applicant.name}"></span></p>
+                            <p><strong>대체근무자:</strong> <span th:text="${request.substitute.name}"></span></p>
+                            <p><strong>휴가 종류:</strong> <span th:text="${request.vacationType.displayName}"></span></p>
+                            <p><strong>기간:</strong> <span th:text="${#temporals.format(request.startDate, 'yyyy-MM-dd')} + ' ~ ' + ${#temporals.format(request.endDate, 'yyyy-MM-dd')} + ' (' + ${request.totalDays} + '일)'"></span></p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>신청일:</strong> <span th:text="${#temporals.format(request.submittedAt, 'yyyy-MM-dd HH:mm')}"></span></p>
+                            <p><strong>사유:</strong> <span th:text="${request.reason}"></span></p>
+                            <p><strong>상태:</strong> 
+                                <span class="status-badge status-pending" th:if="${request.status == 'PENDING'}">대기중</span>
+                                <span class="status-badge status-approved" th:if="${request.status == 'APPROVED'}">승인됨</span>
+                                <span class="status-badge status-rejected" th:if="${request.status == 'REJECTED'}">반려됨</span>
+                                <span class="status-badge status-canceled" th:if="${request.status == 'CANCELED'}">취소됨</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 결재선 -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5>결재선</h5>
+                </div>
+                <div class="card-body">
+                    <div class="approval-line">
+                        <div th:each="step, iterStat : ${request.approvalSteps}" class="approval-step">
+                            <div class="step-number" th:text="${step.stepOrder}"></div>
+                            <div class="step-info">
+                                <div class="approver-name" th:text="${step.approver.name}"></div>
                                 <div class="step-status">
                                     <span class="status-badge status-pending" th:if="${step.status == 'PENDING'}">대기중</span>
                                     <span class="status-badge status-approved" th:if="${step.status == 'APPROVED'}">승인</span>
                                     <span class="status-badge status-rejected" th:if="${step.status == 'REJECTED'}">반려</span>
                                 </div>
-                                <div class="step-date" th:if="${step.approvedAt != null}">
-                                    <strong>처리일:</strong> <span th:text="${#temporals.format(step.approvedAt, 'yyyy-MM-dd HH:mm')}"></span>
-                                </div>
-                                <div class="step-comment" th:if="${step.comment != null and step.comment != ''}">
-                                    <strong>의견:</strong> <span th:text="${step.comment}"></span>
-                                </div>
+                                <div th:if="${step.comment != null and step.comment != ''}" class="step-comment" th:text="${'사유: ' + step.comment}"></div>
+                                <div th:if="${step.approvedAt != null}" class="step-date" th:text="${#temporals.format(step.approvedAt, 'yyyy-MM-dd HH:mm')}"></div>
                             </div>
+                            <div th:if="${!iterStat.last}" class="step-arrow">→</div>
                         </div>
                     </div>
                 </div>
-
-                <!-- 서명 -->
-                <div class="detail-section" th:if="${vacationRequest.signatureImage != null}">
-                    <h3>신청자 서명</h3>
-                    <div class="signature-display">
-                        <img th:src="${vacationRequest.signatureImage}" alt="서명" class="signature-image"/>
+            </div>
+            
+            <!-- 반려 정보 표시 -->
+            <div th:if="${request.status == 'REJECTED'}" class="card mb-4">
+                <div class="card-header">
+                    <h5>반려 정보</h5>
+                </div>
+                <div class="card-body">
+                    <div th:each="step : ${request.approvalSteps}" th:if="${step.status == 'REJECTED'}" class="rejection-info">
+                        <p><strong>반려자:</strong> <span th:text="${step.approver.name}"></span></p>
+                        <p><strong>반려일시:</strong> <span th:text="${#temporals.format(step.approvedAt, 'yyyy-MM-dd HH:mm')}"></span></p>
+                        <p th:if="${step.comment != null and step.comment != ''}"><strong>반려사유:</strong> <span th:text="${step.comment}"></span></p>
                     </div>
                 </div>
-
-                <!-- 최종 승인 정보 -->
-                <div class="detail-section" th:if="${vacationRequest.finalApprovedAt != null}">
-                    <h3>최종 승인 정보</h3>
-                    <table class="detail-table">
-                        <tr>
-                            <th>최종 승인일</th>
-                            <td th:text="${#temporals.format(vacationRequest.finalApprovedAt, 'yyyy-MM-dd HH:mm')}"></td>
-                        </tr>
-                    </table>
+            </div>
+            
+            <!-- 신청자 서명 -->
+            <div class="card mb-4" th:if="${request.signatureImage != null and request.signatureImage != ''}">
+                <div class="card-header">
+                    <h5>신청자 서명</h5>
                 </div>
-
-                <!-- 액션 버튼 -->
-                <div class="actions">
-                    <a href="/approval/my-requests" class="button">목록으로</a>
-                    <a href="/vacation/form" class="button primary">새 휴가 신청</a>
+                <div class="card-body">
+                    <img th:src="${request.signatureImage}" alt="서명" class="signature-image">
                 </div>
-            </section>
+            </div>
+        </div>
+        
+        <div class="mt-3">
+            <a href="/approval/my-requests" class="btn btn-secondary">내 휴가 신청 목록으로</a>
+            <a href="/" class="btn btn-secondary">홈으로</a>
         </div>
     </div>
-
-    <!-- Sidebar -->
-    <div th:replace="~{fragments/sidebar :: #sidebar}"/>
-</div>
-
-<!-- Scripts -->
-<script th:src="@{/js/jquery.min.js}"></script>
-<script th:src="@{/js/bootstrap.bundle.js}"></script>
-<script th:src="@{/js/browser.min.js}"></script>
-<script th:src="@{/js/breakpoints.min.js}"></script>
-<script th:src="@{/js/util.js}"></script>
-<script th:src="@{/js/main.js}"></script>
-<script th:src="@{/js/logout-confirm.js}"></script>
-
+    
+    <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
 </body>
 </html>

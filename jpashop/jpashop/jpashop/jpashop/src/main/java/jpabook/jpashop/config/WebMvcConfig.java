@@ -15,6 +15,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
                         "/",
                         "/login",
                         "/members/login", 
+                        "/members/new",
                         "/members/create",
                         "/css/**",
                         "/js/**", 

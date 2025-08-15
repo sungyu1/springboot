@@ -59,4 +59,31 @@ public class MemberRepository {
                 .setParameter("id", id)
                 .getResultList();
     }
+
+    /**
+     * 부서코드와 직급으로 회원 조회
+     */
+    public List<Member> findByDeptCodeAndJobLevel(String deptCode, String jobLevel) {
+        return em.createQuery("select m from Member m where m.deptCode = :deptCode and m.jobLevel = :jobLevel", Member.class)
+                .setParameter("deptCode", deptCode)
+                .setParameter("jobLevel", jobLevel)
+                .getResultList();
+    }
+
+    /**
+     * 직급으로 회원 조회
+     */
+    public List<Member> findByJobLevel(String jobLevel) {
+        return em.createQuery("select m from Member m where m.jobLevel = :jobLevel", Member.class)
+                .setParameter("jobLevel", jobLevel)
+                .getResultList();
+    }
+
+    /**
+     * 활성화된 회원 조회 (useFlag = '1')
+     */
+    public List<Member> findActiveMembers() {
+        return em.createQuery("select m from Member m where m.useFlag = '1'", Member.class)
+                .getResultList();
+    }
 }

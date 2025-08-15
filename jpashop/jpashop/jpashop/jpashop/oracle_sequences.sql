@@ -17,3 +17,4 @@ CREATE SEQUENCE approval_step_seq
 GRANT SELECT ON vacation_request_seq TO SHCHIS;
 GRANT SELECT ON approval_step_seq TO SHCHIS;
 
+

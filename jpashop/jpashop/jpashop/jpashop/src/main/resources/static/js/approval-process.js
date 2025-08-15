@@ -95,3 +95,4 @@ document.addEventListener('DOMContentLoaded', function() {
         limitCommentLength(); // 초기 글자 수 표시
     }
 });
+

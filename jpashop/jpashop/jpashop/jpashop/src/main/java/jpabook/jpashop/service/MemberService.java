@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -121,32 +120,35 @@ public class MemberService {
             newMember.setName(oracleUser.getName());
             // 동기화 시에도 해시 저장
             newMember.setPassword(passwordEncoder.encode(rawPassword));
-            newMember.setAddress(new Address("Oracle 서버 주소"));
+            newMember.setAddress("oracleCity, oracleStreet");
             newMember.setSignatureImage(null);
             return memberRepository.save(newMember);
         }
         throw new IllegalArgumentException("Oracle 서버에 해당 유저 정보가 없습니다.");
     }
 
-    public List<Member> findByDeptAndJob(String deptCode, int jobType) {
-        // deptCode가 null인 경우 빈 리스트 반환
-        if (deptCode == null) {
-            return new ArrayList<>();
-        }
-        
-        return memberRepository.findAll().stream()
-                .filter(m -> m.getDeptCode() != null && deptCode.equals(m.getDeptCode()))
-                .filter(m -> m.getJobType() != null && m.getJobType() == jobType)
-                .toList();
+    public List<Member> findByDeptAndJob(String deptCode, String jobLevel) {
+        return memberRepository.findByDeptCodeAndJobLevel(deptCode, jobLevel);
     }
 
-    // 인사담당자 조회 (DEPT_CODE='ms', JOB_TYPE=4, USE_FLAG=1)
+    // 인사담당자 목록 조회
     public List<Member> findHrStaff() {
-        return memberRepository.findAll().stream()
-                .filter(m -> "ms".equals(m.getDeptCode()))
-                .filter(m -> m.getJobType() != null && m.getJobType() == 4)
-                .filter(m -> m.getUseFlag() != null && m.getUseFlag() == 1)
-                .toList();
+        return memberRepository.findByJobLevel("3"); // 3: 원장
+    }
+
+    // 부서장 목록 조회
+    public List<Member> findDeptHeads() {
+        return memberRepository.findByJobLevel("2"); // 2: 부서장
+    }
+
+    // 행정원장 목록 조회
+    public List<Member> findCenterDirectors() {
+        return memberRepository.findByJobLevel("5"); // 5: 행정원장
+    }
+
+    // 활성화된 회원 조회
+    public List<Member> findActiveMembers() {
+        return memberRepository.findActiveMembers();
     }
 
     private ApprovalStep createStep(VacationRequest req, Member approver, int order) {

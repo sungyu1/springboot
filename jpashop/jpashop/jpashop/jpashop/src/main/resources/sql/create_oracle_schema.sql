@@ -98,3 +98,4 @@ FROM user_tab_columns
 WHERE table_name IN ('MEMBER', 'VACATION_REQUEST', 'APPROVAL_STEP')
 ORDER BY table_name, column_id;
 
+

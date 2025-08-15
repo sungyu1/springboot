@@ -5,8 +5,8 @@ import jpabook.jpashop.domain.Member;
 import jpabook.jpashop.domain.VacationRequest;
 import jpabook.jpashop.domain.VacationStatus;
 import jpabook.jpashop.repository.ApprovalStepRepository;
-import jpabook.jpashop.repository.VacationRepository;
 import jpabook.jpashop.repository.MemberRepository;
+import jpabook.jpashop.repository.VacationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,7 +16,6 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
 public class ApprovalService {
 
     private final ApprovalStepRepository approvalStepRepository;
@@ -29,6 +28,57 @@ public class ApprovalService {
         return results.stream()
                 .map(this::mapToVacationRequest)
                 .toList();
+    }
+
+    // 결재자가 해당 휴가 신청의 결재자인지 확인
+    public boolean isApprover(Long requestId, String approverId) {
+        return approvalStepRepository.findPendingApprovalsByApproverIdNative(approverId)
+                .stream()
+                .anyMatch(row -> ((java.math.BigDecimal) row[1]).longValue() == requestId);
+    }
+
+    // 결재 처리
+    @Transactional
+    public void processApproval(Long requestId, String approverId, boolean isApproved, String comment) {
+        VacationRequest request = vacationRepository.findById(requestId).orElse(null);
+        if (request == null) {
+            throw new IllegalArgumentException("휴가 신청을 찾을 수 없습니다.");
+        }
+
+        // 현재 결재 단계 찾기
+        List<Object[]> currentSteps = approvalStepRepository.findApprovalStepsByRequestIdNative(requestId);
+        Object[] currentStepData = currentSteps.stream()
+                .filter(row -> approverId.equals(row[2]) && "PENDING".equals(row[4]))
+                .findFirst()
+                .orElse(null);
+
+        if (currentStepData == null) {
+            throw new IllegalArgumentException("결재할 수 있는 단계가 없습니다.");
+        }
+
+        // 결재 단계 업데이트
+        Long stepId = ((java.math.BigDecimal) currentStepData[0]).longValue();
+        approvalStepRepository.updateApprovalStep(stepId, 
+                isApproved ? ApprovalStatus.APPROVED.name() : ApprovalStatus.REJECTED.name(), 
+                comment, 
+                LocalDateTime.now());
+
+        // 다음 결재 단계 확인
+        List<Object[]> remainingSteps = currentSteps.stream()
+                .filter(row -> "PENDING".equals(row[4]))
+                .toList();
+
+        if (remainingSteps.size() <= 1) { // 현재 단계만 남았거나 모든 단계 완료
+            if (isApproved) {
+                // 모든 결재 완료
+                request.setStatus(VacationStatus.APPROVED);
+                request.setFinalApprovedAt(LocalDateTime.now());
+            } else {
+                // 반려됨
+                request.setStatus(VacationStatus.REJECTED);
+            }
+            vacationRepository.save(request);
+        }
     }
 
     // Object[]를 VacationRequest로 변환
@@ -62,7 +112,12 @@ public class ApprovalService {
         
         request.setVacationType(jpabook.jpashop.domain.VacationType.valueOf((String) row[6]));
         request.setReason((String) row[7]);
-        request.setStatus(jpabook.jpashop.domain.VacationStatus.valueOf((String) row[8]));
+        
+        // status 설정
+        String statusStr = (String) row[8];
+        if (statusStr != null) {
+            request.setStatus(jpabook.jpashop.domain.VacationStatus.valueOf(statusStr));
+        }
         
         // submitted_at과 final_approved_at도 Timestamp일 수 있음
         Object submittedAtObj = row[9];
@@ -97,60 +152,4 @@ public class ApprovalService {
         member.setName("알 수 없음");
         return member;
     }
-
-    // 현재 사용자가 해당 휴가 신청의 결재자인지 확인
-    public boolean isApprover(VacationRequest vacationRequest, String userId) {
-        return vacationRequest.getApprovalSteps().stream()
-                .anyMatch(step -> step.getApprover().getId().equals(userId));
-    }
-
-    // 결재 처리 (승인/반려)
-    public void processApproval(Long requestId, String approverId, ApprovalStatus decision, String comment) {
-        VacationRequest vacationRequest = vacationRepository.findById(requestId)
-                .orElseThrow(() -> new IllegalArgumentException("휴가 신청을 찾을 수 없습니다."));
-
-        // 현재 결재 단계 찾기
-        var currentStep = vacationRequest.getApprovalSteps().stream()
-                .filter(step -> step.getStatus() == ApprovalStatus.PENDING)
-                .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("처리할 결재 단계가 없습니다."));
-
-        // 결재자가 맞는지 확인
-        if (!currentStep.getApprover().getId().equals(approverId)) {
-            throw new IllegalArgumentException("해당 결재를 처리할 권한이 없습니다.");
-        }
-
-        // 결재 처리
-        currentStep.setStatus(decision);
-        currentStep.setComment(comment);
-        currentStep.setApprovedAt(LocalDateTime.now());
-
-        // 반려인 경우 휴가 신청 상태를 반려로 변경
-        if (decision == ApprovalStatus.REJECTED) {
-            vacationRequest.setStatus(VacationStatus.REJECTED);
-        } else {
-            // 승인인 경우 다음 단계 확인
-            boolean hasNextPendingStep = vacationRequest.getApprovalSteps().stream()
-                    .anyMatch(step -> step.getStatus() == ApprovalStatus.PENDING);
-
-            if (!hasNextPendingStep) {
-                // 모든 단계가 승인됨 - 최종 승인
-                vacationRequest.setStatus(VacationStatus.APPROVED);
-                vacationRequest.setFinalApprovedAt(LocalDateTime.now());
-            }
-        }
-
-        // 변경사항 저장
-        vacationRepository.save(vacationRequest);
-    }
-
-    // 특정 휴가 신청의 현재 결재 단계 조회
-    public int getCurrentApprovalStep(VacationRequest vacationRequest) {
-        return vacationRequest.getApprovalSteps().stream()
-                .filter(step -> step.getStatus() == ApprovalStatus.PENDING)
-                .findFirst()
-                .map(step -> step.getStepOrder())
-                .orElse(0);
-    }
 }
-

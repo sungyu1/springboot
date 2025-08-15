@@ -35,11 +35,10 @@
             <tr>
               <th>ID</th>
               <th>이름</th>
-              <th>이메일</th>
-              <th>부서</th>
-              <th>직무유형</th>
-              <th>근무상태</th>
               <th>전화번호</th>
+              <th>부서</th>
+              <th>직급</th>
+              <th>근무상태</th>
               <th>주소</th>
               <th>서명</th>
             </tr>
@@ -48,7 +47,7 @@
             <tr th:each="member : ${members}">
               <td th:text="${member.id}"></td>
               <td th:text="${member.name}"></td>
-              <td th:text="${member.email}"></td>
+              <td th:text="${member.phone}"></td>
 
               <!-- 부서코드 해석 + 배지 -->
               <td th:switch="${member.deptCode}">
@@ -61,30 +60,33 @@
                 <span class="dept-badge" th:case="*">기타</span>
               </td>
 
-              <!-- 직무유형 + 배지 -->
-              <td th:switch="${member.jobType}">
-                <span class="job-badge" th:case="1">사원</span>
-                <span class="job-badge" th:case="2">부서장</span>
-                <span class="job-badge" th:case="3">원장</span>
-                <span class="job-badge" th:case="4">진료지원</span>
-                <span class="job-badge" th:case="5">센터장</span>
+              <!-- 직급 + 배지 -->
+              <td th:switch="${member.jobLevel}">
+                <span class="job-badge" th:case="'1'">사원</span>
+                <span class="job-badge" th:case="'2'">부서장</span>
+                <span class="job-badge" th:case="'3'">원장</span>
+                <span class="job-badge" th:case="'4'">진료지원 센터장</span>
+                <span class="job-badge" th:case="'5'">행정원장</span>
+                <span class="job-badge" th:case="'6'">대표원장</span>
+                <span class="job-badge" th:case="'7'">관리자</span>
+                <span class="job-badge" th:case="'8'">전무</span>
                 <span class="job-badge" th:case="*">기타</span>
               </td>
 
               <!-- 근무상태 + 배지 -->
               <td th:switch="${member.useFlag}">
-                <span class="status-badge status-active" th:case="1">근무</span>
-                <span class="status-badge status-inactive" th:case="0">퇴사</span>
+                <span class="status-badge status-active" th:case="'1'">근무</span>
+                <span class="status-badge status-inactive" th:case="'0'">퇴사</span>
                 <span class="status-badge" th:case="*">-</span>
               </td>
 
-              <td th:text="${member.phone}"></td>
-              <td th:text="${member.address?.address}"></td>
+              <td th:text="${member.address}"></td>
               <td>
                 <img class="signature-img"
                      th:if="${member.signatureImage}"
-                     th:src="${member.signatureImage}"
-                     alt="서명">
+                     th:src="@{/members/signature/{memberId}(memberId=${member.id})}"
+                     alt="서명"
+                     style="max-width: 100px; max-height: 50px;">
               </td>
             </tr>
             </tbody>

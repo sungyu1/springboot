@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class HomeController {
 
     @RequestMapping("/")
-    public String rootRedirect() {
-        return "redirect:/index"; // 기본 진입시 index로 리디렉션
+    public String home() {
+        return "home"; // 홈페이지로 시작
     }
 
     @RequestMapping("/index")
